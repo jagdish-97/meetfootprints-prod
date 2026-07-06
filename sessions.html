@@ -8,11 +8,89 @@
   <link rel="icon" type="image/png" href="/icons/new-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            burgundy: "#7B1B4E",
+            rose: "#8C1B52",
+            gold: "#B8963E",
+            mustard: "#C9A84C",
+            sand: "#F5F0E8",
+            panel: "#EDEAE2",
+            cocoa: "#9E7B5A",
+            ink: "#6B6B6B",
+            accent: "#E8758A",
+            white: "#FFFFFF"
+          },
+          boxShadow: {
+            soft: "0 24px 70px rgba(94, 23, 58, 0.12)",
+            card: "0 18px 40px rgba(94, 23, 58, 0.08)"
+          },
+          fontFamily: {
+            display: ["Cormorant Garamond", "serif"],
+            body: ["Nunito", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="pages.css">
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
+        radial-gradient(circle at top right, rgba(232, 117, 138, 0.14), transparent 26%),
+        linear-gradient(180deg, #F5F0E8 0%, #EDEAE2 100%);
+    }
+
+    body.directory-page .page-hero-copy h1,
+    body.directory-page .page-title,
+    body.directory-page .feature-panel h3,
+    body.directory-page .step-timeline-content h3 {
+      font-family: "Cormorant Garamond", serif;
+      letter-spacing: -0.04em;
+      color: var(--rose-950);
+    }
+
+    body.directory-page .page-hero-copy h1 {
+      font-size: clamp(3rem, 5vw, 5rem);
+      line-height: 0.94;
+      max-width: 12ch;
+    }
+
+    body.directory-page .page-title {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      line-height: 0.96;
+      max-width: 14ch;
+    }
+
+    body.directory-page .page-hero-copy p:last-child,
+    body.directory-page .feature-panel p,
+    body.directory-page .detail-list li,
+    body.directory-page .step-timeline-content p {
+      color: var(--ink-700);
+      line-height: 1.72;
+    }
+
+    body.directory-page .home-section-tag {
+      color: var(--cocoa);
+    }
+
+    body.directory-page .step-timeline-content h3 {
+      font-size: 1.3rem;
+    }
+  </style>
 </head>
-<body>
+<body class="directory-page font-body text-ink">
   <header class="home-header">
     <div class="home-topbar">
       <a class="home-brand" href="index.html" aria-label="Footprints to Feel Better home">
@@ -50,18 +128,28 @@
     </div>
   </header>
 
-  <main>
-    <section class="page-hero page-hero-services" aria-labelledby="sessions-hero-title">
-      <div class="home-shell page-hero-grid">
+  <main class="relative overflow-hidden">
+    <section class="relative page-hero page-hero-services" aria-labelledby="sessions-hero-title">
+      <div class="absolute inset-0 -z-10">
+        <div class="absolute -top-24 left-[-5rem] h-64 w-64 rounded-full bg-rose/10 blur-3xl"></div>
+        <div class="absolute top-10 right-[-3rem] h-72 w-72 rounded-full bg-mustard/15 blur-3xl"></div>
+      </div>
+      <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
         <div class="page-hero-copy">
-          <p class="home-section-tag">Our Services</p>
-          <h1 id="sessions-hero-title">Sessions designed to match where you are.</h1>
-          <p>We offer specialized coaching across personal, professional, and emotional areas, providing structured guidance to build clarity, resilience, and growth.</p>
+          <p class="mb-4 text-sm font-extrabold uppercase tracking-[0.34em] text-cocoa">Our Services</p>
+          <h1 id="sessions-hero-title" class="font-display text-5xl leading-[0.92] tracking-[-0.04em] text-burgundy sm:text-6xl lg:text-7xl">
+            Sessions designed to match where you are.
+          </h1>
+          <p class="mt-5 max-w-2xl text-base leading-8 text-ink sm:text-lg">
+            We offer specialized coaching across personal, professional, and emotional areas, providing structured guidance to build clarity, resilience, and growth.
+          </p>
         </div>
         <!-- <div class="page-hero-note">
           <strong>Your path forward</strong>
           <p>Find the session category that matches your goals. Click 'Inquire Now' to open our brief inquiry form and begin matched support.</p>
         </div> -->
+        </div>
       </div>
     </section>
 
@@ -75,8 +163,8 @@
         </div> -->
         <div class="sessions-grid">
           <!-- Card 1: Personal Life Coaching -->
-          <article class="feature-panel">
-            <h3>Personal Life Coaching</h3>
+          <article class="feature-panel text-ink">
+            <h3 class="font-display text-3xl leading-tight tracking-[-0.03em] text-burgundy">Personal Life Coaching</h3>
             <img class="session-card-image" src="images/personal_coaching.png" alt="Personal Life Coaching illustration representing a path and growth">
             <p>Embark on a journey of self-discovery and personal growth. Our sessions help you identify your core values, set meaningful goals, and overcome obstacles hindering your progress.</p>
             <ul class="detail-list">
@@ -88,8 +176,8 @@
           </article>
 
           <!-- Card 2: Career Advancement Coaching -->
-          <article class="feature-panel">
-            <h3>Career Advancement Coaching</h3>
+          <article class="feature-panel text-ink">
+            <h3 class="font-display text-3xl leading-tight tracking-[-0.03em] text-burgundy">Career Advancement Coaching</h3>
             <img class="session-card-image" src="images/career_coaching.png" alt="Career Advancement Coaching illustration representing steps to progress">
             <p>Navigate professional transitions, clarify your goals, and develop key leadership capabilities. Build confidence, map out your career paths, and realize your ambitions.</p>
             <ul class="detail-list">
@@ -101,8 +189,8 @@
           </article>
 
           <!-- Card 3: Relationship Growth Coaching -->
-          <article class="feature-panel">
-            <h3>Relationship Growth Coaching</h3>
+          <article class="feature-panel text-ink">
+            <h3 class="font-display text-3xl leading-tight tracking-[-0.03em] text-burgundy">Relationship Growth Coaching</h3>
             <img class="session-card-image" src="images/relationship_coaching.png" alt="Relationship Growth Coaching illustration representing healthy communication">
             <p>Strengthen connections, develop healthy communication patterns, and resolve conflicts. Navigate romantic, family, or social relationship dynamics with confidence.</p>
             <ul class="detail-list">
@@ -114,8 +202,8 @@
           </article>
 
           <!-- Card 4: Anger Management Session -->
-          <article class="feature-panel">
-            <h3>Anger Management Session</h3>
+          <article class="feature-panel text-ink">
+            <h3 class="font-display text-3xl leading-tight tracking-[-0.03em] text-burgundy">Anger Management Session</h3>
             <img class="session-card-image" src="images/anger_management.png" alt="Anger Management Session illustration representing self-regulation and peace">
             <p>Learn to understand, regulate, and channel anger in healthy, constructive ways. Acquire practical coping tools, cognitive strategies, and mindfulness techniques.</p>
             <ul class="detail-list">
@@ -127,8 +215,8 @@
           </article>
 
           <!-- Card 5: Stress & Burnout Coaching -->
-          <article class="feature-panel">
-            <h3>Stress & Burnout Coaching</h3>
+          <article class="feature-panel text-ink">
+            <h3 class="font-display text-3xl leading-tight tracking-[-0.03em] text-burgundy">Stress & Burnout Coaching</h3>
             <img class="session-card-image" src="images/stress_burnout.png" alt="Stress and Burnout Coaching illustration representing candles and boundaries">
             <p>Reclaim your energy, establish healthy boundaries, and restore balance to your daily life. Designed for high-stress professionals and caregivers to build sustainable self-care.</p>
             <ul class="detail-list">
@@ -140,8 +228,8 @@
           </article>
 
           <!-- Card 6: Grief & Life Transitions Support -->
-          <article class="feature-panel">
-            <h3>Grief & Life Transitions Support</h3>
+          <article class="feature-panel text-ink">
+            <h3 class="font-display text-3xl leading-tight tracking-[-0.03em] text-burgundy">Grief & Life Transitions Support</h3>
             <img class="session-card-image" src="images/grief_transition.png" alt="Grief and Transitions Support illustration representing bird flight and resilience">
             <p>Navigate major shifts like relocation, career changes, or loss with compassionate structure. Process difficult emotional adjustments while building your resilience.</p>
             <ul class="detail-list">
@@ -159,7 +247,7 @@
       <div class="home-shell">
         <div class="page-section-head">
           <div>
-            <p class="home-section-tag">Next Steps</p>
+            <p class="mb-4 text-sm font-extrabold uppercase tracking-[0.34em] text-cocoa">Next Steps</p>
             <h2 class="page-title" id="steps-title">A simpler path into care.</h2>
           </div>
         </div>
