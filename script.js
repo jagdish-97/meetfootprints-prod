@@ -307,6 +307,23 @@ function buildFilterOptions(therapists) {
   );
 }
 
+function normalizeLanguageValue(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function expandLanguageValue(value) {
+  const normalized = normalizeLanguageValue(value);
+  if (!normalized) {
+    return [];
+  }
+
+  return normalized
+    .replace(/\s+and\s+/gi, " ")
+    .split(/[\s,\/&+|·]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function attachEventListeners() {
   initFilterGroupToggles();
   initLoginModal();
@@ -729,10 +746,27 @@ function matchesLanguageFilter(therapistLanguages, selectedLanguage) {
 
   const languageConfig = LANGUAGE_FILTERS.find((language) => language.label === selectedLanguage);
   if (!languageConfig) {
-    return therapistLanguages.includes(selectedLanguage);
+    const selectedLanguageValue = normalizeLanguageValue(selectedLanguage);
+    return therapistLanguages.some((language) => {
+      const therapistLanguageValue = normalizeLanguageValue(language);
+      return therapistLanguageValue === selectedLanguageValue
+        || therapistLanguageValue.includes(selectedLanguageValue)
+        || selectedLanguageValue.includes(therapistLanguageValue);
+    });
   }
 
-  return therapistLanguages.some((language) => languageConfig.aliases.includes(language));
+  return therapistLanguages.some((language) => {
+    const therapistLanguageValue = normalizeLanguageValue(language);
+    const therapistLanguageTokens = expandLanguageValue(language);
+
+    return languageConfig.aliases.some((alias) => {
+      const aliasValue = normalizeLanguageValue(alias);
+      return therapistLanguageValue === aliasValue
+        || therapistLanguageValue.includes(aliasValue)
+        || aliasValue.includes(therapistLanguageValue)
+        || therapistLanguageTokens.includes(aliasValue);
+    });
+  });
 }
 
 function renderCards(therapists) {
