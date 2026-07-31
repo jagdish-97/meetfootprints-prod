@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footprints to Feel Better | Insurance Cost Estimator</title>
+  <meta
+    name="description"
+    content="Check estimated session costs by insurance plan with a simple plan selector that matches Footprints' look and feel."
+  >
+  <link rel="icon" type="image/png" href="/icons/new-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="home.css">
+  <style>
+    :root {
+      --est-heading: #7B1B4E;
+      --est-section: #8C1B52;
+      --est-cta: #B8963E;
+      --est-step: #C9A84C;
+      --est-page: #F5F0E8;
+      --est-card: #EDEAE2;
+      --est-label: #9E7B5A;
+      --est-text: #6B6B6B;
+      --est-accent: #E8758A;
+      --est-white: #FFFFFF;
+      --est-border: rgba(123, 27, 78, 0.16);
+      --est-shadow: 0 18px 44px rgba(123, 27, 78, 0.12);
+    }
+
+    body.insurance-estimator-page {
+      margin: 0;
+      background: var(--est-page);
+      color: var(--est-text);
+      font-family: "Nunito", sans-serif;
+    }
+
+    .insurance-estimator-page h1,
+    .insurance-estimator-page h2,
+    .insurance-estimator-page h3,
+    .insurance-estimator-page h4 {
+      color: var(--est-heading);
+      font-family: "Cormorant Garamond", serif;
+      margin: 0;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .estimator-page-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .estimator-hero {
+      padding: 44px 0 22px;
+      background: var(--est-section);
+      color: var(--est-white);
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .estimator-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .estimator-hero-copy,
+    .estimator-hero-panel,
+    .estimator-wrap,
+    .result-card,
+    .empty-state,
+    .contact-box,
+    .estimator-panel {
+      border-radius: 28px;
+    }
+
+    .estimator-hero-copy {
+      padding: 34px;
+      background: rgba(245, 240, 232, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: var(--est-shadow);
+    }
+
+    .estimator-eyebrow {
+      margin: 0 0 14px;
+      color: #EDEAE2;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .estimator-hero-copy h1 {
+      color: var(--est-white);
+      font-size: clamp(2.6rem, 4.8vw, 4.6rem);
+      max-width: 12ch;
+    }
+
+    .estimator-hero-copy p {
+      margin: 18px 0 0;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.75;
+      max-width: 60ch;
+    }
+
+    .estimator-hero-panel {
+      padding: 28px;
+      background: rgba(245, 240, 232, 0.96);
+      color: var(--est-text);
+      box-shadow: var(--est-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .estimator-hero-panel h2 {
+      font-size: clamp(2rem, 3vw, 3.1rem);
+      margin-bottom: 14px;
+    }
+
+    .estimator-hero-panel p {
+      margin: 0;
+      line-height: 1.72;
+    }
+
+    .estimator-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .estimator-pills span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(140, 27, 82, 0.08);
+      color: var(--est-heading);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .estimator-main {
+      padding: 26px 0 48px;
+    }
+
+    .estimator-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 18px;
+      padding: 18px;
+      background: rgba(237, 234, 226, 0.9);
+      border: 1px solid var(--est-border);
+      box-shadow: var(--est-shadow);
+    }
+
+    .estimator-panel {
+      padding: 26px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.32);
+      border: 1px solid rgba(123, 27, 78, 0.08);
+      min-width: 0;
+    }
+
+    .step {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .step-label {
+      color: var(--est-label);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .step select {
+      width: 100%;
+      max-width: 100%;
+      min-height: 52px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 27, 78, 0.18);
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--est-heading);
+      font: inherit;
+      font-weight: 700;
+      font-size: 16px;
+      outline: none;
+      appearance: none;
+      box-sizing: border-box;
+    }
+
+    .step select:focus {
+      box-shadow: 0 0 0 4px rgba(184, 150, 62, 0.18);
+      border-color: rgba(184, 150, 62, 0.52);
+    }
+
+    .estimator-title {
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .step .hint {
+      margin: 0;
+      color: var(--est-text);
+      line-height: 1.7;
+    }
+
+    #result-area {
+      min-height: 100%;
+    }
+
+    .empty-state,
+    .result-card {
+      padding: 26px;
+      background: var(--est-card);
+      border: 1px solid rgba(123, 27, 78, 0.12);
+      box-shadow: var(--est-shadow);
+    }
+
+    .empty-state {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      text-align: center;
+      min-height: 100%;
+      align-content: center;
+    }
+
+    .empty-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: rgba(184, 150, 62, 0.12);
+      color: var(--est-cta);
+      font-size: 1.6rem;
+    }
+
+    .result-card {
+      display: grid;
+      gap: 18px;
+    }
+
+    .result-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .ins-name {
+      font-size: clamp(2rem, 3.2vw, 3rem);
+      font-weight: 700;
+      color: var(--est-heading);
+      font-family: "Cormorant Garamond", serif;
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--est-white);
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge-inn {
+      background: var(--est-section);
+    }
+
+    .badge-medicaid {
+      background: var(--est-cta);
+      color: var(--est-heading);
+    }
+
+    .badge-oon {
+      background: #A32D2D;
+    }
+
+    .plans-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .plan-tag {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(140, 27, 82, 0.08);
+      color: var(--est-heading);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .divider-label {
+      margin-top: 4px;
+      padding-top: 16px;
+      border-top: 2px solid var(--est-cta);
+      color: var(--est-label);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .cost-grid,
+    .cost-grid-single {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cost-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cost-box {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(123, 27, 78, 0.08);
+    }
+
+    .cost-box.highlight {
+      background: rgba(140, 27, 82, 0.08);
+    }
+
+    .cost-box-label {
+      color: var(--est-label);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cost-box-value {
+      margin-top: 10px;
+      color: var(--est-heading);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    .cost-box-value.savings {
+      color: var(--est-section);
+    }
+
+    .oop-color {
+      color: var(--est-heading);
+    }
+
+    .cost-box-sub {
+      margin-top: 8px;
+      color: var(--est-text);
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+
+    .savings-banner {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(184, 150, 62, 0.14);
+      color: var(--est-heading);
+      font-weight: 800;
+    }
+
+    .note {
+      padding: 14px 16px;
+      border-left: 4px solid var(--est-cta);
+      background: rgba(255, 255, 255, 0.66);
+      border-radius: 16px;
+      color: var(--est-text);
+      line-height: 1.68;
+    }
+
+    .source-note,
+    .disclaimer {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--est-text);
+    }
+
+    .disclaimer strong {
+      color: var(--est-heading);
+    }
+
+    .contact-box {
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(123, 27, 78, 0.1);
+    }
+
+    .contact-box-title {
+      color: var(--est-heading);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .contact-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+      color: var(--est-text);
+    }
+
+    .contact-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display: inline-grid;
+      place-items: center;
+      background: rgba(140, 27, 82, 0.1);
+      color: var(--est-heading);
+      flex: 0 0 auto;
+    }
+
+    .contact-row a {
+      color: var(--est-heading);
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 14px 24px;
+      border: 1px solid rgba(105, 11, 63, 0.12);
+      border-radius: 999px;
+      background: #fff8fbc2;
+      color: var(--est-heading);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 12px 24px rgba(123, 27, 78, 0.12);
+      transition:
+        transform 180ms ease,
+        background 220ms ease,
+        color 220ms ease,
+        border-color 220ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--est-heading);
+      background: var(--est-heading);
+      color: #fff;
+      box-shadow: 0 16px 28px rgba(123, 27, 78, 0.18);
+    }
+
+    .home-footer {
+      margin-top: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .estimator-hero-grid,
+      .estimator-wrap,
+      .cost-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .estimator-page-shell {
+        width: min(100% - 24px, 100%);
+      }
+
+      .estimator-hero {
+        padding-top: 28px;
+      }
+
+      .estimator-hero-copy,
+      .estimator-hero-panel,
+      .estimator-panel,
+      .result-card,
+      .empty-state,
+      .contact-box {
+        padding: 20px;
+      }
+
+      .estimator-wrap {
+        padding: 14px;
+        gap: 14px;
+      }
+
+      .estimator-hero-grid {
+        gap: 14px;
+      }
+
+      .estimator-hero-copy,
+      .estimator-hero-panel,
+      .estimator-wrap,
+      .result-card,
+      .empty-state,
+      .contact-box,
+      .estimator-panel {
+        min-width: 0;
+      }
+
+      .plans-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .plan-tag {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .cost-grid {
+        gap: 12px;
+      }
+
+      .result-header,
+      .contact-row {
+        align-items: flex-start;
+      }
+
+      .contact-row {
+        gap: 8px;
+        overflow-wrap: anywhere;
+      }
+
+      .step select {
+        min-height: 48px;
+      }
+
+      .step .hint,
+      .note,
+      .source-note,
+      .disclaimer,
+      .estimator-hero-copy p {
+        overflow-wrap: anywhere;
+      }
+    }
+  </style>
+</head>
+<body class="insurance-estimator-page">
+  <header class="home-header">
+    <div class="home-topbar">
+      <a class="home-brand" href="index.html" aria-label="Footprints to Feel Better home">
+        <img class="home-brand-logo" src="/icons/new-logo.png" alt="Footprints to Feel Better logo">
+        <span class="home-brand-name">Footprints to Feel Better</span>
+      </a>
+
+      <nav class="home-nav" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="sessions.html">Our Sessions</a>
+        <a href="clinical-staff.html">Clinical Staff</a>
+        <a href="coaches.html">Coaches</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="home-actions">
+        <a class="home-cta home-cta-desktop" href="tel:+19173523625">(917) 352-3625</a>
+        <button
+          class="home-menu-toggle"
+          id="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="home-service-strip">Insurance Cost Estimator</div>
+
+    <div class="home-mobile-menu" id="mobile-menu" hidden>
+      <nav class="home-mobile-links" aria-label="Mobile navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="sessions.html">Our Sessions</a>
+        <a href="clinical-staff.html">Clinical Staff</a>
+        <a href="coaches.html">Coaches</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a class="home-cta home-cta-mobile" href="contact.html">Verify your insurance</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="estimator-hero">
+      <div class="estimator-page-shell estimator-hero-grid">
+        <div class="estimator-hero-copy">
+          <p class="estimator-eyebrow">Coverage planning</p>
+          <h1>Insurance cost estimator</h1>
+          <p>
+            Use the selector below to see a simple cost estimate based on your insurance plan.
+            The numbers are intended to help you plan ahead before booking.
+          </p>
+          <p>
+            If your insurance is not listed, we can still help you review your options and confirm
+            the next best step.
+          </p>
+        </div>
+
+        <div class="estimator-hero-panel">
+          <h2>What this page shows</h2>
+          <p>
+            A clear estimate, a breakdown of likely copay or deductible ranges, and a quick path
+            to contact us if you want the Intake team to verify your exact benefits.
+          </p>
+          <div class="estimator-pills" aria-hidden="true">
+            <span>Estimated copay</span>
+            <span>Typical deductible</span>
+            <span>Out-of-pocket rate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="estimator-main">
+      <div class="estimator-page-shell">
+        <div class="estimator-wrap">
+          <div class="estimator-panel">
+            <div class="step">
+              <span class="step-label">Select your insurance plan</span>
+              <select id="ins-select" onchange="showResult()">
+                <option value="">-- Choose your insurance --</option>
+                <option value="aetna">Aetna</option>
+                <option value="affinity">Affinity (Molina)</option>
+                <option value="carelon">Carelon / Beacon</option>
+                <option value="cigna">Cigna / Evernorth</option>
+                <option value="uhc">UnitedHealthcare / Optum</option>
+                <option value="seiu">1199 SEIU</option>
+                <option value="healthfirst">Healthfirst</option>
+                <option value="mvp">MVP Health Care</option>
+                <option value="other">My insurance is not listed here</option>
+              </select>
+            </div>
+            <p class="hint">
+              Pick a plan to view the estimate and guidance. The figures are informational only
+              and should be verified by our Intake team before scheduling.
+            </p>
+          </div>
+
+          <div id="result-area" aria-live="polite">
+            <div class="empty-state">
+              <div class="empty-icon">⛨</div>
+              Select your insurance above to see your estimated cost per session.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="home-footer">
+    <div class="home-shell home-footer-grid">
+      <div>
+        <a class="home-brand home-brand-footer" href="index.html">
+          <img class="home-brand-logo" src="/icons/new-logo.png" alt="Footprints to Feel Better logo">
+          <span class="home-brand-name">Footprints to Feel Better</span>
+        </a>
+        <p class="home-footer-copy">
+          Supportive mental health care with warmth, professionalism, and a more personal path to
+          finding the right therapist.
+        </p>
+      </div>
+
+      <div class="home-footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="sessions.html">Our Sessions</a>
+        <a href="clinical-staff.html">Clinical Staff</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <div class="home-footer-contact">
+        <a href="tel:+19173523625">(917) 352-3625</a>
+        <p>Open 7 days a week, 6 AM to 10 PM</p>
+        <p id="home-year"></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="home.js"></script>
+  <script src="insurance-cost-estimator.js"></script>
+</body>
+</html>
