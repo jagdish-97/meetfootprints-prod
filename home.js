@@ -3,7 +3,7 @@ const mobileMenu = document.getElementById("mobile-menu");
 const yearTarget = document.getElementById("home-year");
 
 if (yearTarget) {
-  yearTarget.textContent = "© " + new Date().getFullYear() + " Footprints to Feel Better";
+  yearTarget.textContent = "\u00A9 " + new Date().getFullYear() + " Footprints to Feel Better";
 }
 
 if (menuToggle && mobileMenu) {
