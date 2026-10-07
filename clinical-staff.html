@@ -1,23 +1,77 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Find Your Therapist | Footprints to Feel Better</title>
-  <meta
-    name="description"
-    content="Browse Footprints therapists by state, specialty, language, therapy type, price, and availability."
-  >
+  <meta name="description"
+    content="Browse Footprints therapists by state, specialty, language, therapy type, price, and availability.">
   <link rel="icon" type="image/png" href="/icons/new-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+    rel="stylesheet">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .identity-filter-note {
+      font-size: .82rem;
+      line-height: 1.5;
+      color: #59424b;
+      margin: 0 0 .7rem;
+    }
+
+    .identity-filter-group :is(button, input, select):focus-visible {
+      outline: 3px solid #6f2143;
+      outline-offset: 3px;
+    }
+
+    #languages-options,
+    #mobile-languages-options {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #languages-options .filter-checkbox,
+    #mobile-languages-options .filter-checkbox {
+      min-width: 0;
+    }
+
+    #languages-options .filter-checkbox span,
+    #mobile-languages-options .filter-checkbox span {
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .identity-filter-group[hidden] {
+      display: none !important;
+    }
+
+    #pronouns-options,
+    #mobile-pronouns-options {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #specialties-options,
+    #mobile-specialties-options {
+      display: block;
+    }
+
+    .specialty-subgroup {
+      border: 0;
+      padding: 0;
+      margin: 0 0 1rem;
+      min-width: 0;
+    }
+
+    .specialty-subgroup legend {
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: .5rem;
+    }
+  </style>
 </head>
+
 <body class="directory-page">
   <header class="home-header">
     <div class="home-topbar">
@@ -35,7 +89,8 @@
       </nav>
       <div class="home-actions">
         <button class="home-cta home-cta-desktop" id="open-login-modal" type="button">Therapist Login</button>
-        <button class="home-menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <button class="home-menu-toggle" id="menu-toggle" type="button" aria-expanded="false"
+          aria-controls="mobile-menu" aria-label="Open menu">
           <span></span>
           <span></span>
           <span></span>
@@ -74,7 +129,8 @@
             <span class="sr-only">Search therapists</span>
             <input id="therapist-search" type="search" placeholder="Search therapists, specialties, or languages">
           </label>
-          <button class="mobile-filter-trigger" type="button" id="open-filters">
+          <button class="mobile-filter-trigger" type="button" id="open-filters" aria-controls="mobile-filters"
+            aria-expanded="false">
             <span class="filter-icon" aria-hidden="true"></span>
             Filters
           </button>
@@ -86,16 +142,46 @@
         <aside class="filters-panel desktop-filters" aria-label="Advanced filters">
           <div class="filter-header">
             <h2>Advanced Filters</h2>
-            <button class="text-button" type="button" data-clear-filters>Reset Filters</button>
+            <button class="text-button" type="button" data-clear-filters>Clear filters</button>
           </div>
 
           <div class="filter-group">
             <button class="filter-group-toggle" type="button" aria-expanded="true">
-              <span>State</span>
+              <span>Location</span>
               <span class="filter-group-arrow" aria-hidden="true"></span>
             </button>
             <div class="filter-group-body">
               <div class="filter-options" id="state-options"></div>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true">
+              <span>Session Options</span>
+              <span class="filter-group-arrow" aria-hidden="true"></span>
+            </button>
+            <div class="filter-group-body">
+              <div class="filter-options" id="sessionFormat-options"></div>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true">
+              <span>Population</span>
+              <span class="filter-group-arrow" aria-hidden="true"></span>
+            </button>
+            <div class="filter-group-body">
+              <div class="filter-options" id="population-options"></div>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true">
+              <span>Modalities</span>
+              <span class="filter-group-arrow" aria-hidden="true"></span>
+            </button>
+            <div class="filter-group-body">
+              <div class="filter-options" id="modalities-options"></div>
             </div>
           </div>
 
@@ -109,9 +195,57 @@
             </div>
           </div>
 
+          <div class="filter-group identity-filter-group"><button class="filter-group-toggle" type="button"
+              aria-expanded="true" aria-controls="pronouns-body"><span>Provider pronouns</span><span
+                class="filter-group-arrow" aria-hidden="true"></span></button>
+            <div class="filter-group-body" id="pronouns-body">
+              <div class="filter-options" id="pronouns-options" role="group" aria-label="Provider pronouns"></div>
+            </div>
+          </div>
+          <div class="filter-group identity-filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true"
+              aria-controls="gender-body"><span>Therapist gender</span><span class="filter-group-arrow"
+                aria-hidden="true"></span></button>
+            <div class="filter-group-body" id="gender-body">
+              <p class="identity-filter-note">Only self-described gender shared for public display is used.</p>
+              <div class="filter-options" id="gender-options" role="group" aria-label="Therapist gender"></div>
+            </div>
+          </div>
+          <div class="filter-group identity-filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true"
+              aria-controls="culturalBackground-body"><span>Provider cultural / ethnic background</span><span
+                class="filter-group-arrow" aria-hidden="true"></span></button>
+            <div class="filter-group-body" id="culturalBackground-body">
+              <p class="identity-filter-note">Choose one or more backgrounds. Therapists may keep this information
+                private.</p>
+              <div class="filter-options" id="culturalBackground-options" role="group"
+                aria-label="Provider cultural / ethnic background"></div>
+            </div>
+          </div>
+          <div class="filter-group identity-filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true"
+              aria-controls="religiousBackground-body"><span>Provider religion / spiritual background</span><span
+                class="filter-group-arrow" aria-hidden="true"></span></button>
+            <div class="filter-group-body" id="religiousBackground-body">
+              <p class="identity-filter-note">Choose one or more backgrounds. These are identities, not treatment
+                approaches.</p>
+              <div class="filter-options" id="religiousBackground-options" role="group"
+                aria-label="Provider religion / spiritual background"></div>
+            </div>
+          </div>
+          <div class="filter-group identity-filter-group">
+            <button class="filter-group-toggle" type="button" aria-expanded="true"
+              aria-controls="faithIntegrated-body"><span>Faith-integrated therapy</span><span class="filter-group-arrow"
+                aria-hidden="true"></span></button>
+            <div class="filter-group-body" id="faithIntegrated-body">
+              <p class="identity-filter-note">An approach to therapy, separate from religious identity.</p>
+              <div class="filter-options" id="faithIntegrated-options" role="group"
+                aria-label="Faith-integrated therapy"></div>
+            </div>
+          </div>
           <div class="filter-group">
             <button class="filter-group-toggle" type="button" aria-expanded="true">
-              <span>Languages</span>
+              <span>Provider languages spoken</span>
               <span class="filter-group-arrow" aria-hidden="true"></span>
             </button>
             <div class="filter-group-body">
@@ -119,7 +253,7 @@
             </div>
           </div>
 
-          <div class="filter-group">
+          <div class="filter-group" hidden style="display:none">
             <button class="filter-group-toggle" type="button" aria-expanded="true">
               <span>Therapy Type</span>
               <span class="filter-group-arrow" aria-hidden="true"></span>
@@ -169,15 +303,17 @@
           <div class="results-topline">
             <div>
               <p class="results-label">Therapist Directory</p>
-              <p class="results-count" id="results-count">Loading therapists...</p>
+              <p class="results-count" id="results-count" role="status" aria-live="polite" aria-atomic="true">Loading
+                therapists...</p>
             </div>
             <p class="results-note">Refines instantly as you choose filters</p>
           </div>
 
-          <div class="no-results hidden" id="no-results">
-            <h2>Unfortunately, there are no therapists with availability matching your selected filters.</h2>
-            <p>Please try adjusting your preferences, or explore the recommended therapists below—we’ve suggested options that may still be a great fit based on your selections.</p>
-            <button class="secondary-button" type="button" data-clear-filters>Clear all filters</button>
+          <div class="no-results hidden" id="no-results" role="status">
+            <h2>No therapists match all of your selections.</h2>
+            <p>Try removing a filter or broadening your preferences. Some therapists choose to keep identity details
+              private and will not appear under those specific filters.</p><button class="secondary-button"
+              type="button" data-clear-filters>Clear filters</button>
           </div>
           <div class="cards-grid" id="cards-grid" aria-live="polite"></div>
           <nav class="pagination hidden" id="pagination" aria-label="Therapist pages"></nav>
@@ -213,7 +349,8 @@
   </footer>
 
   <div class="mobile-filters-backdrop hidden" id="mobile-filters-backdrop"></div>
-  <aside class="mobile-filters hidden" id="mobile-filters" aria-label="Mobile filters">
+  <aside class="mobile-filters hidden" id="mobile-filters" role="dialog" aria-modal="true"
+    aria-label="Therapist filters">
     <div class="mobile-sheet-handle" aria-hidden="true"></div>
     <div class="filter-header">
       <h2>Advanced Filters</h2>
@@ -222,11 +359,41 @@
     <div class="mobile-filters-content">
       <div class="filter-group">
         <button class="filter-group-toggle" type="button" aria-expanded="true">
-          <span>State</span>
+          <span>Location</span>
           <span class="filter-group-arrow" aria-hidden="true"></span>
         </button>
         <div class="filter-group-body">
           <div class="filter-options" id="mobile-state-options"></div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true">
+          <span>Session Options</span>
+          <span class="filter-group-arrow" aria-hidden="true"></span>
+        </button>
+        <div class="filter-group-body">
+          <div class="filter-options" id="mobile-sessionFormat-options"></div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true">
+          <span>Population</span>
+          <span class="filter-group-arrow" aria-hidden="true"></span>
+        </button>
+        <div class="filter-group-body">
+          <div class="filter-options" id="mobile-population-options"></div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true">
+          <span>Modalities</span>
+          <span class="filter-group-arrow" aria-hidden="true"></span>
+        </button>
+        <div class="filter-group-body">
+          <div class="filter-options" id="mobile-modalities-options"></div>
         </div>
       </div>
 
@@ -240,9 +407,57 @@
         </div>
       </div>
 
+      <div class="filter-group identity-filter-group"><button class="filter-group-toggle" type="button"
+          aria-expanded="true" aria-controls="mobile-pronouns-body"><span>Provider pronouns</span><span
+            class="filter-group-arrow" aria-hidden="true"></span></button>
+        <div class="filter-group-body" id="mobile-pronouns-body">
+          <div class="filter-options" id="mobile-pronouns-options" role="group" aria-label="Provider pronouns"></div>
+        </div>
+      </div>
+      <div class="filter-group identity-filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true"
+          aria-controls="mobile-gender-body"><span>Therapist gender</span><span class="filter-group-arrow"
+            aria-hidden="true"></span></button>
+        <div class="filter-group-body" id="mobile-gender-body">
+          <p class="identity-filter-note">Only self-described gender shared for public display is used.</p>
+          <div class="filter-options" id="mobile-gender-options" role="group" aria-label="Therapist gender"></div>
+        </div>
+      </div>
+      <div class="filter-group identity-filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true"
+          aria-controls="mobile-culturalBackground-body"><span>Provider cultural / ethnic background</span><span
+            class="filter-group-arrow" aria-hidden="true"></span></button>
+        <div class="filter-group-body" id="mobile-culturalBackground-body">
+          <p class="identity-filter-note">Choose one or more backgrounds. Therapists may keep this information private.
+          </p>
+          <div class="filter-options" id="mobile-culturalBackground-options" role="group"
+            aria-label="Provider cultural / ethnic background"></div>
+        </div>
+      </div>
+      <div class="filter-group identity-filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true"
+          aria-controls="mobile-religiousBackground-body"><span>Provider religion / spiritual background</span><span
+            class="filter-group-arrow" aria-hidden="true"></span></button>
+        <div class="filter-group-body" id="mobile-religiousBackground-body">
+          <p class="identity-filter-note">Choose one or more backgrounds. These are identities, not treatment
+            approaches.</p>
+          <div class="filter-options" id="mobile-religiousBackground-options" role="group"
+            aria-label="Provider religion / spiritual background"></div>
+        </div>
+      </div>
+      <div class="filter-group identity-filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true"
+          aria-controls="mobile-faithIntegrated-body"><span>Faith-integrated therapy</span><span
+            class="filter-group-arrow" aria-hidden="true"></span></button>
+        <div class="filter-group-body" id="mobile-faithIntegrated-body">
+          <p class="identity-filter-note">An approach to therapy, separate from religious identity.</p>
+          <div class="filter-options" id="mobile-faithIntegrated-options" role="group"
+            aria-label="Faith-integrated therapy"></div>
+        </div>
+      </div>
       <div class="filter-group">
         <button class="filter-group-toggle" type="button" aria-expanded="true">
-          <span>Languages</span>
+          <span>Provider languages spoken</span>
           <span class="filter-group-arrow" aria-hidden="true"></span>
         </button>
         <div class="filter-group-body">
@@ -250,7 +465,7 @@
         </div>
       </div>
 
-      <div class="filter-group">
+      <div class="filter-group" hidden style="display:none">
         <button class="filter-group-toggle" type="button" aria-expanded="true">
           <span>Therapy Type</span>
           <span class="filter-group-arrow" aria-hidden="true"></span>
@@ -295,7 +510,7 @@
       -->
     </div>
     <div class="mobile-actions">
-      <button class="secondary-button" type="button" data-clear-filters>Clear All</button>
+      <button class="secondary-button" type="button" data-clear-filters>Clear filters</button>
       <button class="primary-button" type="button" id="apply-mobile-filters">Apply Filters</button>
     </div>
   </aside>
@@ -315,21 +530,24 @@
         <label class="auth-modal-field" for="therapist-login-password-input">
           <span>Password or PIN</span>
           <div class="password-input-wrap">
-            <input id="therapist-login-password-input" type="password" placeholder="Enter your password or PIN" required>
-            <button type="button" class="password-toggle" data-password-toggle data-target="therapist-login-password-input" aria-label="Show password">Show</button>
+            <input id="therapist-login-password-input" type="password" placeholder="Enter your password or PIN"
+              required>
+            <button type="button" class="password-toggle" data-password-toggle
+              data-target="therapist-login-password-input" aria-label="Show password">Show</button>
           </div>
         </label>
         <button class="primary-button" type="submit">Sign In</button>
       </form>
-      <p class="auth-modal-status" id="login-modal-status">After sign-in, you will be redirected to the therapist portal.</p>
+      <p class="auth-modal-status" id="login-modal-status">After sign-in, you will be redirected to the therapist
+        portal.</p>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="supabase-client.js"></script>
-  <script src="therapists-data.js"></script>
-  <script src="script.js" defer></script>
+  <script src="therapists-data.js?v=20261005-english-normalized"></script>
+  <script src="therapist-filters.js?v=20261006-inperson17"></script>
+  <script src="script.js?v=20261006-schizophrenia-9" defer></script>
 </body>
 </html>
-

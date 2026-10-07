@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
   <script>
     tailwind.config = {
@@ -38,6 +37,7 @@
     };
   </script>
 </head>
+
 <body class="min-h-screen bg-blush font-body text-ink">
   <div class="fixed inset-0 -z-10 overflow-hidden">
     <div class="absolute left-[-5%] top-0 h-96 w-96 rounded-full bg-[#ffd7df] blur-3xl opacity-70"></div>
@@ -48,24 +48,20 @@
   <header class="border-b border-white/60 bg-white/70 backdrop-blur-xl">
     <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
       <a href="index.html" class="flex items-center gap-3 self-start sm:self-auto">
-        <img src="/icons/new-logo.png" alt="Footprints to Feel Better logo" class="h-11 w-11 rounded-2xl object-cover shadow-md">
+        <img src="/icons/new-logo.png" alt="Footprints to Feel Better logo"
+          class="h-11 w-11 rounded-2xl object-cover shadow-md">
         <div>
           <p class="font-heading text-lg font-extrabold tracking-tight text-rosewood">Footprints to Feel Better</p>
           <p class="text-sm text-[#7b6169]">Therapist Profile</p>
         </div>
       </a>
       <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-        <a
-          href="clinical-staff.html"
-          class="inline-flex items-center justify-center rounded-full border border-rosewood/15 bg-white px-4 py-2 text-sm font-semibold text-rosewood transition hover:-translate-y-0.5 hover:bg-rosewood hover:text-white"
-        >
+        <a href="clinical-staff.html"
+          class="inline-flex items-center justify-center rounded-full border border-rosewood/15 bg-white px-4 py-2 text-sm font-semibold text-rosewood transition hover:-translate-y-0.5 hover:bg-rosewood hover:text-white">
           Back to directory
         </a>
-        <a
-          href="therapist-portal.html"
-          id="profile-edit-link"
-          class="hidden inline-flex items-center justify-center rounded-full bg-rosewood px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
-        >
+        <a href="therapist-portal.html" id="profile-edit-link"
+          class="hidden inline-flex items-center justify-center rounded-full bg-rosewood px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5">
           Edit Profile
         </a>
       </div>
@@ -74,16 +70,13 @@
 
   <main class="mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-14">
     <section class="grid gap-8 xl:grid-cols-[380px_minmax(0,1fr)]">
-      <aside class="rounded-[2.25rem] bg-white/90 p-6 shadow-editorial ring-1 ring-[#f0d8dd] sm:p-8 xl:sticky xl:top-8 xl:self-start">
+      <aside
+        class="rounded-[2.25rem] bg-white/90 p-6 shadow-editorial ring-1 ring-[#f0d8dd] sm:p-8 xl:sticky xl:top-8 xl:self-start">
         <p class="text-xs font-bold uppercase tracking-[0.24em] text-clay">Meet Your Therapist</p>
 
         <div class="mt-5 overflow-hidden rounded-[2rem] bg-gradient-to-br from-rosewood via-berry to-[#c15a6d] p-4">
-          <img
-            id="profile-image"
-            src="data/portraits/portrait.svg"
-            alt="Therapist portrait"
-            class="aspect-[4/5] w-full rounded-[1.5rem] bg-mist object-cover"
-          >
+          <img id="profile-image" src="data/portraits/portrait.svg" alt="Therapist portrait"
+            class="aspect-[4/5] w-full rounded-[1.5rem] bg-mist object-cover">
         </div>
 
         <div class="mt-6">
@@ -97,9 +90,14 @@
             <div id="languages-list" class="mt-3 flex flex-wrap gap-2"></div>
           </div>
           <div class="rounded-[1.5rem] bg-sand p-5 ring-1 ring-[#f1e0dc]">
-            <p class="text-xs font-bold uppercase tracking-[0.2em] text-clay">Formats</p>
-            <div id="therapy-types-list" class="mt-3 flex flex-wrap gap-2"></div>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-clay">In Person / Virtual</p>
+            <div id="session-format-list" class="mt-3 flex flex-wrap gap-2"></div>
           </div>
+          <div class="rounded-[1.5rem] bg-sand p-5 ring-1 ring-[#f1e0dc]">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-clay">Population</p>
+            <div id="population-list" class="mt-3 flex flex-wrap gap-2"></div>
+          </div>
+
         </div>
       </aside>
 
@@ -108,7 +106,9 @@
           <p class="text-xs font-bold uppercase tracking-[0.24em] text-clay">Profile</p>
           <div class="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div class="max-w-3xl">
-              <h2 id="profile-name" class="font-heading text-4xl font-extrabold leading-tight text-rosewood sm:text-5xl">Loading profile...</h2>
+              <h2 id="profile-name"
+                class="font-heading text-4xl font-extrabold leading-tight text-rosewood sm:text-5xl">Loading profile...
+              </h2>
               <p id="profile-role" class="mt-3 text-base font-medium text-[#7b6169] sm:text-lg"></p>
               <p id="profile-summary" class="mt-5 max-w-2xl text-base leading-8 text-[#5b4850]"></p>
             </div>
@@ -142,7 +142,8 @@
             <div id="about-copy" class="mt-6 space-y-4 text-base leading-8 text-[#5b4850]"></div>
           </div>
 
-          <div class="rounded-[2.25rem] bg-gradient-to-br from-rosewood to-[#a33d61] p-6 text-white shadow-editorial lg:p-8">
+          <div
+            class="rounded-[2.25rem] bg-gradient-to-br from-rosewood to-[#a33d61] p-6 text-white shadow-editorial lg:p-8">
             <p class="text-xs font-bold uppercase tracking-[0.22em] text-white/70">Highlights</p>
             <div class="mt-5 space-y-4">
               <div class="rounded-[1.5rem] bg-white/10 p-5 backdrop-blur-sm">
@@ -163,17 +164,33 @@
       <div class="max-w-3xl">
         <p class="text-xs font-bold uppercase tracking-[0.22em] text-clay">Specialties</p>
         <h3 class="mt-3 font-heading text-3xl font-extrabold text-rosewood">Focus areas of care</h3>
-        <p class="mt-4 text-base leading-7 text-[#5b4850]">Key areas this therapist may support, approached with clarity, care, and steady guidance.</p>
+        <p class="mt-4 text-base leading-7 text-[#5b4850]">Key areas this therapist may support, approached with
+          clarity, care, and steady guidance.</p>
       </div>
       <div id="specialties-grid" class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+    </section>
+
+    <section aria-labelledby="therapeutic-approaches-heading"
+      class="mt-10 rounded-[2.25rem] bg-white/90 p-6 shadow-editorial ring-1 ring-[#f0d8dd] lg:p-8">
+      <h3 id="therapeutic-approaches-heading" class="font-heading text-3xl font-extrabold text-rosewood">Therapeutic
+        Approaches</h3>
+      <div id="modalities-list" class="mt-6 flex flex-wrap gap-3"></div>
+    </section>
+
+    <section aria-labelledby="identifies-as-heading"
+      class="mt-10 rounded-[2.25rem] bg-white/90 p-6 shadow-editorial ring-1 ring-[#f0d8dd] lg:p-8">
+      <h3 id="identifies-as-heading" class="font-heading text-3xl font-extrabold text-rosewood">Identifies as</h3>
+      <div id="identifies-as-content" class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
     </section>
 
     <section class="mt-10 rounded-[2.25rem] bg-white/90 p-6 shadow-editorial ring-1 ring-[#f0d8dd] lg:p-8">
       <div class="flex flex-col gap-5">
         <div class="max-w-3xl">
           <p class="text-xs font-bold uppercase tracking-[0.22em] text-clay">What to expect</p>
-          <h3 class="mt-3 font-heading text-3xl font-extrabold text-rosewood">How this therapist may support the client</h3>
-          <p class="mt-4 text-base leading-7 text-[#5b4850]">A simple view of how sessions may begin, how support may be guided, and what next steps can look like.</p>
+          <h3 class="mt-3 font-heading text-3xl font-extrabold text-rosewood">How this therapist may support the client
+          </h3>
+          <p class="mt-4 text-base leading-7 text-[#5b4850]">A simple view of how sessions may begin, how support may be
+            guided, and what next steps can look like.</p>
         </div>
       </div>
 
@@ -196,24 +213,23 @@
       </div>
     </section>
 
-    <section id="not-found-state" class="mt-10 hidden rounded-[2.25rem] bg-white/90 p-10 text-center shadow-editorial ring-1 ring-[#f0d8dd]">
+    <section id="not-found-state"
+      class="mt-10 hidden rounded-[2.25rem] bg-white/90 p-10 text-center shadow-editorial ring-1 ring-[#f0d8dd]">
       <h2 class="font-heading text-3xl font-extrabold text-rosewood">Therapist not found</h2>
       <p class="mx-auto mt-4 max-w-xl text-base leading-7 text-[#5b4850]">
         The selected therapist profile could not be loaded. Please return to the directory and choose another therapist.
       </p>
-      <a
-        href="clinical-staff.html"
-        class="mt-6 inline-flex items-center rounded-full bg-rosewood px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5"
-      >
+      <a href="clinical-staff.html"
+        class="mt-6 inline-flex items-center rounded-full bg-rosewood px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">
         Return to directory
       </a>
     </section>
   </main>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="supabase-client.js"></script>
-  <script src="therapists-data.js"></script>
-  <script src="therapist-profile.js" defer></script>
+  <script src="therapists-data.js?v=20261005-english-normalized"></script>
+  <script src="therapist-filters.js?v=20261006-inperson17"></script>
+  <script src="therapist-profile.js?v=20261007-full-care-labels-1" defer></script>
 </body>
 </html>

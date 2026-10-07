@@ -1,4 +1,290 @@
-const FILTER_KEYS = ["state", "specialties", "languages", "therapyTypes", "availability"];
+const SPECIALTY_GROUPS = { "Mood, anxiety & mental health": ["Anxiety", "Bipolar / Manic", "Depression", "OCD", "Personality Disorders", "Schizophrenia", "Self-Doubt"], "Neurodevelopment & disability": ["ADHD", "Autism Spectrum", "Disabilities", "Neurodivergence"], "Addictions & substance use": ["Chemical Dependency", "Drug Addiction / Alcoholism", "Gambling"], "Body image, eating & health": ["Bariatric", "Body Dysmorphia", "Eating Disorders", "HIV/AIDS", "Traumatic Injury"], "Trauma & safety": ["Domestic Violence", "High Risk", "PTSD", "Self Harm"], "Sexual concerns": ["Sex Addiction", "Sexual Disorder", "Sexual Trauma"], "Identity & cultural concerns": ["Cultural / Ethnic Concerns", "LGBTQ", "Men's Issues", "Trans Issues", "Women's Issues"], "Relationships & life stages": ["Divorce", "End of Life", "Geriatrics", "Grief", "Infertility", "Parenting", "Postpartum"], "Other concerns": ["Hoarding"] };
+const SPECIALTY_CATEGORY_ALIASES = { "Schizo": "Schizophrenia", "Bariatric Ass.": "Bariatric", "Body Dysmporphia": "Body Dysmorphia", "Chemical Dep.": "Chemical Dependency", "Cultural Ethnic": "Cultural / Ethnic Concerns", "Drug Addiction/Alcoholism": "Drug Addiction / Alcoholism", "Eating Disorder": "Eating Disorders", "Mens Issues": "Men's Issues", "Tramatic Injury": "Traumatic Injury", "Autism Spectrum Disorder": "Autism Spectrum", "Bariatric Support": "Bariatric", "Bipolar Disorder": "Bipolar / Manic", "Body Dysmorphic Disorder": "Body Dysmorphia", "Disability-related Concerns": "Disabilities", "End-of-Life Support": "End of Life", "Gambling Addiction": "Gambling", "Older Adults": "Geriatrics", "Grief / Loss": "Grief", "High-Risk Behaviors": "High Risk", "Hoarding Disorder": "Hoarding", "LGBTQ+ Support": "LGBTQ", "Post-Traumatic Stress Disorder": "PTSD", "Substance Use": "Drug Addiction / Alcoholism", "Women’s Issues": "Women's Issues" };
+const MODALITY_CHOICES = ["Art Therapy", "Brain Spotting", "CBT", "Christian Counseling", "DBT", "EMDR", "Exposure Therapy", "Exposure Therapy (Narrative)", "Dance/ Movement Therapy", "Internal Family Systems (IFS)", "Music Therapy", "Person- Centered", "Play Therapy", "Somatic"];
+function normalizeSpecialties(values) {
+  const allowed = Object.values(SPECIALTY_GROUPS).flat();
+  return [...new Set((values || []).flatMap(raw => {
+    const trimmed = String(raw).trim();
+    const direct = SPECIALTY_CATEGORY_ALIASES[trimmed] || trimmed;
+    if (allowed.includes(direct)) return [direct];
+    return legacyNormalizeSpecialties([trimmed]).map(value => SPECIALTY_CATEGORY_ALIASES[value] || value).filter(value => allowed.includes(value));
+  }))];
+}
+function normalizeModalities(values) {
+  const aliases = { "Brainspotting": "Brain Spotting", "Narrative Exposure Therapy": "Exposure Therapy (Narrative)", "Dance/Movement Therapy": "Dance/ Movement Therapy", "Person-Centered": "Person- Centered" };
+  return [...new Set((values || []).map(value => aliases[value] || value).filter(value => MODALITY_CHOICES.includes(value)))];
+}
+const SPECIALTY_ALIASES = {
+  "depression": [
+    "Depression"
+  ],
+  "dep": [
+    "Depression"
+  ],
+  "anxiety": [
+    "Anxiety"
+  ],
+  "anx": [
+    "Anxiety"
+  ],
+  "autism spectrum disorder": [
+    "Autism Spectrum Disorder"
+  ],
+  "asd": [
+    "Autism Spectrum Disorder"
+  ],
+  "autism": [
+    "Autism Spectrum Disorder"
+  ],
+  "bariatric support": [
+    "Bariatric Support"
+  ],
+  "bariatric concerns": [
+    "Bariatric Support"
+  ],
+  "bipolar disorder": [
+    "Bipolar Disorder"
+  ],
+  "bipolar": [
+    "Bipolar Disorder"
+  ],
+  "bd/man": [
+    "Bipolar Disorder"
+  ],
+  "bd/manic": [
+    "Bipolar Disorder"
+  ],
+  "body dysmorphic disorder": [
+    "Body Dysmorphic Disorder"
+  ],
+  "bdd": [
+    "Body Dysmorphic Disorder"
+  ],
+  "body dysmporphia": [
+    "Body Dysmorphic Disorder"
+  ],
+  "substance use": [
+    "Substance Use"
+  ],
+  "chemical d": [
+    "Substance Use"
+  ],
+  "chemical dep": [
+    "Substance Use"
+  ],
+  "chemical dependency": [
+    "Substance Use"
+  ],
+  "substance use disorder": [
+    "Substance Use"
+  ],
+  "sud": [
+    "Substance Use"
+  ],
+  "cultural / ethnic concerns": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cul.e": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cul.ethn": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cul.ethnic": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cultural / ethnic issues": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cultural/ethnic concerns": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "disability-related concerns": [
+    "Disability-related Concerns"
+  ],
+  "disab": [
+    "Disability-related Concerns"
+  ],
+  "disab.": [
+    "Disability-related Concerns"
+  ],
+  "disability": [
+    "Disability-related Concerns"
+  ],
+  "divorce": [
+    "Divorce"
+  ],
+  "div": [
+    "Divorce"
+  ],
+  "divorce-related issues": [
+    "Divorce"
+  ],
+  "domestic violence": [
+    "Domestic Violence"
+  ],
+  "dv": [
+    "Domestic Violence"
+  ],
+  "eating disorders": [
+    "Eating Disorders"
+  ],
+  "ed": [
+    "Eating Disorders"
+  ],
+  "end-of-life support": [
+    "End-of-Life Support"
+  ],
+  "end-of-life care": [
+    "End-of-Life Support"
+  ],
+  "eol": [
+    "End-of-Life Support"
+  ],
+  "grief / loss": [
+    "Grief / Loss"
+  ],
+  "grief": [
+    "Grief / Loss"
+  ],
+  "grief & loss": [
+    "Grief / Loss"
+  ],
+  "hoarding disorder": [
+    "Hoarding Disorder"
+  ],
+  "hoarding": [
+    "Hoarding Disorder"
+  ],
+  "lgbtq+ support": [
+    "LGBTQ+ Support"
+  ],
+  "lgbtq": [
+    "LGBTQ+ Support"
+  ],
+  "life transitions": [
+    "Life Transitions"
+  ],
+  "life transition": [
+    "Life Transitions"
+  ],
+  "self-esteem": [
+    "Self-Esteem"
+  ],
+  "low self-esteem": [
+    "Self-Esteem"
+  ],
+  "self-doubt": [
+    "Self-Doubt"
+  ],
+  "self doubt": [
+    "Self-Doubt"
+  ],
+  "self-d": [
+    "Self-Doubt"
+  ],
+  "parenting": [
+    "Parenting"
+  ],
+  "parentin": [
+    "Parenting"
+  ],
+  "personality disorders": [
+    "Personality Disorders"
+  ],
+  "pd": [
+    "Personality Disorders"
+  ],
+  "post-traumatic stress disorder": [
+    "Post-Traumatic Stress Disorder"
+  ],
+  "ptsd": [
+    "Post-Traumatic Stress Disorder"
+  ],
+  "person-centered therapy": [
+    "Person-Centered Therapy"
+  ],
+  "pc": [
+    "Person-Centered Therapy"
+  ],
+  "stress management": [
+    "Stress Management"
+  ],
+  "stress": [
+    "Stress Management"
+  ],
+  "breathwork": [
+    "Breathwork"
+  ],
+  "breath work": [
+    "Breathwork"
+  ],
+  "older adults": [
+    "Older Adults"
+  ],
+  "geriatr": [
+    "Older Adults"
+  ],
+  "anxiety depression": [
+    "Anxiety",
+    "Depression"
+  ],
+  "stress greif-loss": [
+    "Stress Management",
+    "Grief / Loss"
+  ],
+  "somatic anx": [
+    "Somatic",
+    "Anxiety"
+  ],
+  "somatic/anx": [
+    "Somatic",
+    "Anxiety"
+  ],
+  "somatic|anx": [
+    "Somatic",
+    "Anxiety"
+  ]
+};
+function legacyNormalizeSpecialties(values) {
+  const result = [];
+  for (const raw of values || []) {
+    const value = String(raw).trim().replace(/\s+/g, " "), key = value.toLowerCase();
+    if (SPECIALTY_ALIASES[key]) { result.push(...SPECIALTY_ALIASES[key]); continue; }
+    if (value.includes("|")) { result.push(...legacyNormalizeSpecialties(value.split("|"))); continue; }
+    if (/^[a-z]$/i.test(value) || /^(IF|ND|PP|RPT|RT|AT|MT|F\/B|F\/B\/LGBTQ\+|WI.*)$/i.test(value)) continue;
+    if (value) result.push(value);
+  }
+  return [...new Map(result.map(value => [value.toLowerCase(), value])).values()];
+}
+const PRONOUN_CHOICES = ["She/Her", "He/Him", "They/Them", "Ze / Zir / Zirs", "Zie / Zir", "Ze / Hir / Hirs", "Xe / Xem / Xyr", "Sie / Hir", "Fae / Faer", "Thon / Thons", "Other"];
+function pronounDisplayLabel(value) { return value === "They/Them" ? "They / Them / Theirs" : value; }
+function pronounKey(value) { const key = String(value).toLowerCase().replace(/\s/g, ""); return key === "they/them/theirs" ? "they/them" : key; }
+function matchesPronouns(values, selected) {
+  return !selected.length || values.some(value => selected.some(choice => choice === "Other"
+    ? !PRONOUN_CHOICES.filter(item => item !== "Other").some(item => pronounKey(item) === pronounKey(value))
+    : pronounKey(choice) === pronounKey(value)));
+}
+const LANGUAGE_DISPLAY_LABELS = {
+  "Español": "Spanish (Español)",
+  "Русский": "Russian (Русский)",
+  "中文": "Chinese / Mandarin (中文)",
+  "العربية": "Arabic (العربية)",
+  "தமிழ்": "Tamil (தமிழ்)",
+  "اردو": "Urdu (اردو)",
+  "हिंदी": "Hindi (हिंदी)",
+  "ਪੰਜਾਬੀ": "Punjabi (ਪੰਜਾਬੀ)",
+  "Bangla": "Bengali (বাংলা)",
+  "Cantonese": "Cantonese (廣東話)",
+  "Korean": "Korean (한국어)",
+  "English/Arabic": "English / Arabic (العربية)",
+  "TWI": "Twi"
+};
+function languageDisplayLabel(value) { return LANGUAGE_DISPLAY_LABELS[value] || value; }
+const FILTER_KEYS = ["pronouns", "gender", "culturalBackground", "religiousBackground", "faithIntegrated", "state", "sessionFormat", "population", "modalities", "specialties", "languages", "therapyTypes", "availability"];
+const SESSION_FORMAT_ORDER = ["In-Person", "Virtual"];
+const LOCATION_OPTIONS = ["NY", "NJ", "CT", "FL", "NV"];
+const POPULATION_ORDER = ["Individuals", "Couples", "Families", "Adults", "Teens (13-17)", "Children (5-12)", "Groups"];
 const PAGE_SIZE = 3;
 const DEFAULT_THERAPIST_IMAGE = "data/portraits/portrait.svg";
 let imageHydrationRunId = 0;
@@ -32,18 +318,26 @@ const state = {
   filters: {
     search: "",
     state: [],
+    sessionFormat: [],
+    population: [],
+    modalities: [],
     specialties: [],
     languages: [],
     therapyTypes: [],
+    pronouns: [], gender: [], culturalBackground: [], religiousBackground: [], faithIntegrated: [],
     availability: [],
     priceMin: 0,
     priceMax: 300
   },
   options: {
     state: [],
+    sessionFormat: [],
+    population: [],
+    modalities: [],
     specialties: [],
     languages: [],
     therapyTypes: [],
+    pronouns: [], gender: [], culturalBackground: [], religiousBackground: [], faithIntegrated: [],
     availability: []
   }
 };
@@ -90,9 +384,17 @@ const elements = {
   mobilePriceOutput: null,
   optionBuckets: {
     state: [document.querySelector("#state-options"), document.querySelector("#mobile-state-options")],
+    sessionFormat: [document.querySelector("#sessionFormat-options"), document.querySelector("#mobile-sessionFormat-options")],
+    population: [document.querySelector("#population-options"), document.querySelector("#mobile-population-options")],
+    modalities: [document.querySelector("#modalities-options"), document.querySelector("#mobile-modalities-options")],
     specialties: [document.querySelector("#specialties-options"), document.querySelector("#mobile-specialties-options")],
     languages: [document.querySelector("#languages-options"), document.querySelector("#mobile-languages-options")],
     therapyTypes: [document.querySelector("#therapyTypes-options"), document.querySelector("#mobile-therapyTypes-options")],
+    pronouns: [document.querySelector("#pronouns-options"), document.querySelector("#mobile-pronouns-options")],
+    gender: [document.querySelector("#gender-options"), document.querySelector("#mobile-gender-options")],
+    culturalBackground: [document.querySelector("#culturalBackground-options"), document.querySelector("#mobile-culturalBackground-options")],
+    religiousBackground: [document.querySelector("#religiousBackground-options"), document.querySelector("#mobile-religiousBackground-options")],
+    faithIntegrated: [document.querySelector("#faithIntegrated-options"), document.querySelector("#mobile-faithIntegrated-options")],
     availability: [document.querySelector("#availability-options"), document.querySelector("#mobile-availability-options")]
   }
 };
@@ -255,27 +557,150 @@ async function init() {
 }
 
 async function loadTherapists() {
-  return window.therapistDataApi.loadTherapists({
+  const therapists = await window.therapistDataApi.loadTherapists({
     includeImages: false,
     fallbackUrl: "data/therapists.json",
     fallbackData: fallbackTherapists
+  });
+  return therapists.map(applyFilterOverlay);
+}
+
+/* ---- Extra filter data (therapist-filters.js) matched by therapist name ---- */
+function normalizePersonName(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\b1099\b/g, " ")
+    .replace(/[^a-z\s()-]/g, " ")
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getNameVariants(value) {
+  const normalized = normalizePersonName(value);
+  const withoutParens = normalized.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+  const variants = [withoutParens];
+  (normalized.match(/\(([^)]*)\)/g) || []).forEach((group) => {
+    const inner = group.replace(/[()]/g, "").trim();
+    if (inner.split(" ").length > 1) {
+      variants.push(inner);
+    }
+  });
+  return variants.filter(Boolean).map((name) => name.split(" ").filter(Boolean));
+}
+
+let filterOverlayIndex = null;
+function getFilterOverlayIndex() {
+  if (!filterOverlayIndex) {
+    const records = Array.isArray(window.THERAPIST_FILTER_DATA) ? window.THERAPIST_FILTER_DATA : [];
+    filterOverlayIndex = records.map((record) => ({
+      record,
+      variants: [record.name, ...(Array.isArray(record.aliases) ? record.aliases : [])].flatMap(getNameVariants)
+    }));
+  }
+  return filterOverlayIndex;
+}
+
+function findFilterOverlay(therapistName) {
+  const targets = getNameVariants(therapistName);
+  if (!targets.length) {
+    return null;
+  }
+  const index = getFilterOverlayIndex();
+  const exact = (a, b) => a.join(" ") === b.join(" ");
+  const firstLast = (a, b) => a.length > 1 && b.length > 1 && a[0] === b[0] && a[a.length - 1] === b[b.length - 1];
+  const containsAll = (a, b) => a.length > 1 && b.length > 1 && a[0] === b[0] && b.every((token) => a.includes(token));
+  const similarLast = (a, b) => a.length > 1 && b.length > 1 && a[0] === b[0] && a[a.length - 1].slice(0, 3) === b[b.length - 1].slice(0, 3);
+  for (const matcher of [exact, firstLast, containsAll, (a, b) => containsAll(b, a), similarLast]) {
+    const match = index.find(({ variants }) => variants.some((variant) => targets.some((target) => matcher(target, variant))));
+    if (match) {
+      return match.record;
+    }
+  }
+  return null;
+}
+
+
+// Only explicit, public-display-approved identity values belong in this public data file.
+// Omit private values entirely at publication; never derive gender from pronouns.
+const PUBLIC_IDENTITY_FILTER_KEYS = ["pronouns", "gender", "culturalBackground", "religiousBackground"];
+function findPublicIdentityRecord(name) {
+  const normalize = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]+/g, " ").trim();
+  const target = normalize(name);
+  if (!target) return null;
+  const records = Array.isArray(window.THERAPIST_FILTER_DATA) ? window.THERAPIST_FILTER_DATA : [];
+  const matches = records.filter(record => Array.isArray(record.identityProfileNames) && record.identityProfileNames.some(alias => normalize(alias) === target));
+  return matches.length === 1 ? matches[0] : null;
+}
+function getPublicIdentityValues(record, field) {
+  const identity = record && record.identifiesAs;
+  if (!identity || !identity.publicDisplay || identity.publicDisplay[field] !== true) return [];
+  const values = Array.isArray(identity[field]) ? identity[field] : identity[field] ? [identity[field]] : [];
+  return [...new Set(values.filter(value => typeof value === "string").map(value => value.trim()).filter(value => value && !/^(prefer not to (disclose|say)|private|not disclosed|not provided|unknown)$/i.test(value)))];
+}
+function identityFilterFields(name) {
+  const record = findPublicIdentityRecord(name);
+  return { pronouns: [...new Set(getPublicIdentityValues(record, "pronouns").map(value => ({ "she/her": "She/Her", "he/him": "He/Him", "they/them": "They/Them" })[value.toLowerCase()] || value))], gender: getPublicIdentityValues(record, "gender"), culturalBackground: getPublicIdentityValues(record, "ethnicity"), religiousBackground: getPublicIdentityValues(record, "faith") };
+}
+
+function applyFilterOverlay(therapist) {
+  if (!therapist) {
+    return therapist;
+  }
+  const overlay = findFilterOverlay(therapist.name);
+  return {
+    ...therapist,
+    ...identityFilterFields(therapist.name),
+    specialties: normalizeSpecialties(Array.isArray(overlay?.specialties) ? overlay.specialties : therapist.specialties),
+    faithIntegrated: (findPublicIdentityRecord(therapist.name)?.modalities || []).includes("Christian Counseling") ? ["Offers faith-integrated therapy"] : [],
+    location: therapist.location || (overlay && overlay.state) || "",
+    locations: [...new Set([therapist.location, overlay && overlay.state].filter(Boolean))],
+    sessionFormat: overlay && Array.isArray(overlay.sessionFormat) && overlay.sessionFormat.length ? overlay.sessionFormat : ["Virtual"],
+    population: overlay && Array.isArray(overlay.population) ? overlay.population : [],
+    modalities: normalizeModalities(overlay && Array.isArray(overlay.modalities) ? overlay.modalities : [])
+  };
+}
+
+function sortByPreferredOrder(values, order) {
+  return [...values].sort((a, b) => {
+    const left = order.indexOf(a);
+    const right = order.indexOf(b);
+    if (left === -1 && right === -1) {
+      return a.localeCompare(b);
+    }
+    if (left === -1) {
+      return 1;
+    }
+    if (right === -1) {
+      return -1;
+    }
+    return left - right;
   });
 }
 
 function buildFilterOptions(therapists) {
   const optionMap = {
     state: new Set(),
+    sessionFormat: new Set(),
+    population: new Set(),
+    modalities: new Set(),
     specialties: new Set(),
     languages: new Set(),
     therapyTypes: new Set(),
+    pronouns: new Set(), gender: new Set(), culturalBackground: new Set(), religiousBackground: new Set(), faithIntegrated: new Set(),
     availability: new Set()
   };
 
   therapists.forEach((therapist) => {
-    if (therapist.location) {
-      optionMap.state.add(therapist.location);
-    }
-    therapist.specialties.forEach((item) => optionMap.specialties.add(item));
+    if (!therapist.title || !therapist.title.trim()) return;
+    ["pronouns", "gender", "culturalBackground", "religiousBackground", "faithIntegrated"].forEach(key => (therapist[key] || []).forEach(value => optionMap[key].add(value)));
+    LOCATION_OPTIONS.forEach((item) => optionMap.state.add(item));
+    (therapist.sessionFormat || []).forEach((item) => optionMap.sessionFormat.add(item));
+    (therapist.population || []).forEach((item) => optionMap.population.add(item));
+    (therapist.modalities || []).forEach((item) => optionMap.modalities.add(item));
+    normalizeSpecialties(therapist.specialties).forEach((item) => optionMap.specialties.add(item));
     therapist.languages.forEach((item) => {
       const matchedLanguage = LANGUAGE_FILTERS.find((language) => language.aliases.includes(item));
       optionMap.languages.add(matchedLanguage ? matchedLanguage.label : item);
@@ -287,10 +712,33 @@ function buildFilterOptions(therapists) {
     optionMap.availability.add(therapist.availability);
   });
 
+  MODALITY_CHOICES.forEach(value => optionMap.modalities.add(value));
+  Object.values(SPECIALTY_GROUPS).flat().forEach(value => optionMap.specialties.add(value));
+  PRONOUN_CHOICES.forEach(value => optionMap.pronouns.add(value));
   LANGUAGE_FILTERS.forEach((language) => optionMap.languages.add(language.label));
+
+  [...optionMap.languages].filter(value => /^bilingual$/i.test(value.trim())).forEach(value => optionMap.languages.delete(value));
+  [...optionMap.religiousBackground].filter(value => /^none$/i.test(value.trim())).forEach(value => optionMap.religiousBackground.delete(value));
 
   return Object.fromEntries(
     Object.entries(optionMap).map(([key, values]) => {
+      if (key === "state") {
+        return [key, LOCATION_OPTIONS.filter((item) => values.has(item))];
+      }
+
+      if (key === "sessionFormat") {
+        return [key, sortByPreferredOrder(values, SESSION_FORMAT_ORDER)];
+      }
+
+      if (key === "population") {
+        return [key, sortByPreferredOrder(values, POPULATION_ORDER)];
+      }
+
+      if (key === "modalities") return [key, sortByPreferredOrder(values, MODALITY_CHOICES)];
+      if (key === "pronouns") return [key, sortByPreferredOrder(values, PRONOUN_CHOICES)];
+      if (key === "gender") return [key, sortByPreferredOrder(values, ["Woman", "Man", "Nonbinary"])];
+      if (key === "culturalBackground") return [key, sortByPreferredOrder(values, ["White", "Black", "Latino/Latina", "South Asian", "East Asian", "South East Asian", "Indigenous", "Other"])];
+      if (key === "religiousBackground") return [key, sortByPreferredOrder(values, ["Christian", "Muslim", "Jewish", "Spiritual", "None", "Other"])];
       if (key !== "languages") {
         return [key, [...values].sort((a, b) => a.localeCompare(b))];
       }
@@ -326,6 +774,7 @@ function expandLanguageValue(value) {
 
 function attachEventListeners() {
   initFilterGroupToggles();
+  initMobileFilterAccessibility();
   initLoginModal();
   initTherapistUpdateListener();
 
@@ -489,9 +938,9 @@ function handleCardActionClick(event) {
 }
 
 function renderFilterOptions() {
-  FILTER_KEYS.forEach((key) => {
-    const buckets = elements.optionBuckets[key];
-    buckets.forEach((bucket) => {
+  FILTER_KEYS.forEach(key => {
+    (elements.optionBuckets[key] || []).filter(Boolean).forEach(bucket => {
+      if (key === "gender") bucket.closest(".filter-group").hidden = !state.options.gender.length;
       bucket.replaceChildren(createCheckboxFragment(key, state.options[key]));
     });
   });
@@ -500,18 +949,27 @@ function renderFilterOptions() {
 
 function createCheckboxFragment(groupKey, values) {
   const fragment = document.createDocumentFragment();
-
-  values.forEach((value) => {
-    const label = document.createElement("label");
-    label.className = "filter-checkbox";
-    label.innerHTML = `
-      <input type="checkbox" value="${value}" data-filter-group="${groupKey}">
-      <span>${value}</span>
-    `;
-    label.querySelector("input").addEventListener("change", handleCheckboxChange);
-    fragment.appendChild(label);
+  if (groupKey === "gender" && !values.length) {
+    const note = document.createElement("p");
+    note.className = "identity-filter-note";
+    note.textContent = "No gender details have been shared for public filtering yet.";
+    fragment.appendChild(note);
+  }
+  if (groupKey === "specialties") {
+    Object.entries(SPECIALTY_GROUPS).forEach(([heading, choices]) => {
+      const fieldset = document.createElement("fieldset"); fieldset.className = "specialty-subgroup";
+      const legend = document.createElement("legend"); legend.textContent = heading; fieldset.appendChild(legend);
+      const options = document.createElement("div"); options.className = "filter-options";
+      options.appendChild(createCheckboxFragment("specialtyChoices", choices.filter(value => values.includes(value)))); fieldset.appendChild(options); fragment.appendChild(fieldset);
+    });
+    return fragment;
+  }
+  values.forEach(value => {
+    const label = document.createElement("label"); label.className = "filter-checkbox";
+    const input = document.createElement("input"); input.type = "checkbox"; input.value = value; input.dataset.filterGroup = groupKey === "specialtyChoices" ? "specialties" : groupKey;
+    const span = document.createElement("span"); span.textContent = groupKey === "languages" ? languageDisplayLabel(value) : groupKey === "pronouns" ? pronounDisplayLabel(value) : value;
+    input.addEventListener("change", handleCheckboxChange); label.append(input, span); fragment.appendChild(label);
   });
-
   return fragment;
 }
 
@@ -588,11 +1046,18 @@ function hydrateStateFromUrl() {
   }
 
   FILTER_KEYS.forEach((key) => {
+    if (PUBLIC_IDENTITY_FILTER_KEYS.includes(key) || key === "faithIntegrated") {
+      state.filters[key] = params.getAll(key).filter(value => state.options[key].includes(value));
+      if (key === "gender") state.filters[key] = state.filters[key].slice(0, 1);
+      return;
+    }
     const raw = params.get(key);
     if (!raw) {
       return;
     }
     state.filters[key] = raw.split(",").map((item) => decodeURIComponent(item)).filter(Boolean);
+    if (key === "modalities") state.filters[key] = normalizeModalities(state.filters[key]);
+    if (key === "specialties") state.filters[key] = normalizeSpecialties(state.filters[key]).filter(value => state.options.specialties.includes(value));
   });
 
   const urlPage = Number(params.get("page"));
@@ -612,7 +1077,8 @@ function updateUrlFromState() {
 
   FILTER_KEYS.forEach((key) => {
     if (state.filters[key].length) {
-      params.set(key, state.filters[key].join(","));
+      if (PUBLIC_IDENTITY_FILTER_KEYS.includes(key) || key === "faithIntegrated") state.filters[key].forEach(value => params.append(key, value));
+      else params.set(key, state.filters[key].join(","));
     }
   });
 
@@ -628,13 +1094,8 @@ function updateUrlFromState() {
 function render(resetPage = false) {
   state.filteredTherapists = getFilteredTherapists();
 
-  if (state.filteredTherapists.length === 0 && hasActiveFilters()) {
-    state.showingRecommendations = true;
-    state.displayedTherapists = getRecommendedTherapists(3);
-  } else {
-    state.showingRecommendations = false;
-    state.displayedTherapists = state.filteredTherapists;
-  }
+  state.showingRecommendations = false;
+  state.displayedTherapists = state.filteredTherapists;
 
   const totalPages = state.showingRecommendations
     ? 1
@@ -656,7 +1117,7 @@ function render(resetPage = false) {
   renderResultsCount(state.filteredTherapists.length, state.displayedTherapists.length, state.showingRecommendations);
   renderActiveFilters();
   renderPagination(totalPages);
-  toggleNoResults(state.showingRecommendations);
+  toggleNoResults(state.filteredTherapists.length === 0);
 }
 
 function getFilteredTherapists() {
@@ -673,25 +1134,42 @@ function getFilteredTherapists() {
       therapist.location,
       ...therapist.specialties,
       ...therapist.languages,
-      ...therapist.therapyTypes
+      ...therapist.therapyTypes,
+      ...(therapist.population || []),
+      ...(therapist.modalities || [])
     ].join(" ").toLowerCase().includes(searchTerm);
 
-    const matchesState = !state.filters.state.length || state.filters.state.includes(therapist.location);
+    const wantsVirtual = !state.filters.sessionFormat.length || state.filters.sessionFormat.includes("Virtual");
+    const servesAllLocationsVirtually = wantsVirtual && (therapist.sessionFormat || []).includes("Virtual");
+    const matchesState = !state.filters.state.length
+      || servesAllLocationsVirtually
+      || (therapist.locations || [therapist.location]).some((item) => state.filters.state.includes(item));
+    const matchesSessionFormat = !state.filters.sessionFormat.length
+      || (therapist.sessionFormat || []).some((item) => state.filters.sessionFormat.includes(item));
+    const matchesPopulation = !state.filters.population.length
+      || (therapist.population || []).some((item) => state.filters.population.includes(item));
+    const matchesModalities = !state.filters.modalities.length
+      || (therapist.modalities || []).some((item) => state.filters.modalities.includes(item));
     const matchesSpecialties = !state.filters.specialties.length
-      || therapist.specialties.some((item) => state.filters.specialties.includes(item));
+      || normalizeSpecialties(therapist.specialties).some((item) => state.filters.specialties.includes(item));
     const matchesLanguages = !state.filters.languages.length
       || state.filters.languages.some((language) => matchesLanguageFilter(therapist.languages, language));
     const matchesTherapyTypes = !state.filters.therapyTypes.length
       || therapist.therapyTypes.some((item) => state.filters.therapyTypes.includes(item));
+    const matchesPublicPreferences = ["pronouns", "gender", "culturalBackground", "religiousBackground", "faithIntegrated"].every(key => key === "pronouns" ? matchesPronouns(therapist.pronouns || [], state.filters.pronouns) : !state.filters[key].length || (therapist[key] || []).some(value => state.filters[key].includes(value)));
     const matchesAvailability = !state.filters.availability.length
       || state.filters.availability.includes(therapist.availability);
     return [
       matchesSearch,
       matchesState,
+      matchesSessionFormat,
+      matchesPopulation,
+      matchesModalities,
       matchesSpecialties,
       matchesLanguages,
       matchesTherapyTypes,
-      matchesAvailability
+      matchesAvailability,
+      matchesPublicPreferences
     ].every(Boolean);
   });
 }
@@ -701,36 +1179,39 @@ function getRecommendedTherapists(minimumCount = 3) {
   const scored = state.therapists
     .filter((therapist) => typeof therapist.title === "string" && therapist.title.trim().length > 0)
     .map((therapist) => {
-    let score = 0;
+      let score = 0;
 
-    if (searchTerm) {
-      const haystack = [
-        therapist.name,
-        therapist.title,
-        therapist.location,
-        ...therapist.specialties,
-        ...therapist.languages,
-        ...therapist.therapyTypes
-      ].join(" ").toLowerCase();
-      if (haystack.includes(searchTerm)) {
-        score += 5;
+      if (searchTerm) {
+        const haystack = [
+          therapist.name,
+          therapist.title,
+          therapist.location,
+          ...therapist.specialties,
+          ...therapist.languages,
+          ...therapist.therapyTypes
+        ].join(" ").toLowerCase();
+        if (haystack.includes(searchTerm)) {
+          score += 5;
+        }
       }
-    }
 
-    if (state.filters.state.includes(therapist.location)) {
-      score += 4;
-    }
+      if ((therapist.locations || [therapist.location]).some((item) => state.filters.state.includes(item))) {
+        score += 4;
+      }
 
-    score += therapist.specialties.filter((item) => state.filters.specialties.includes(item)).length * 3;
-    score += state.filters.languages.filter((language) => matchesLanguageFilter(therapist.languages, language)).length * 3;
-    score += therapist.therapyTypes.filter((item) => state.filters.therapyTypes.includes(item)).length * 2;
+      score += (therapist.population || []).filter((item) => state.filters.population.includes(item)).length * 3;
+      score += (therapist.modalities || []).filter((item) => state.filters.modalities.includes(item)).length * 2;
+      score += (therapist.sessionFormat || []).filter((item) => state.filters.sessionFormat.includes(item)).length * 2;
+      score += therapist.specialties.filter((item) => state.filters.specialties.includes(item)).length * 3;
+      score += state.filters.languages.filter((language) => matchesLanguageFilter(therapist.languages, language)).length * 3;
+      score += therapist.therapyTypes.filter((item) => state.filters.therapyTypes.includes(item)).length * 2;
 
-    if (state.filters.availability.includes(therapist.availability)) {
-      score += 1;
-    }
+      if (state.filters.availability.includes(therapist.availability)) {
+        score += 1;
+      }
 
-    return { therapist, score };
-  });
+      return { therapist, score };
+    });
 
   const recommendations = scored
     .sort((left, right) => right.score - left.score || left.therapist.name.localeCompare(right.therapist.name))
@@ -923,7 +1404,7 @@ function initTherapistUpdateListener() {
 }
 
 function handleTherapistUpdateEvent(event) {
-  const updatedTherapist = window.therapistDataApi.parseTherapistUpdateEvent(event);
+  const updatedTherapist = applyFilterOverlay(window.therapistDataApi.parseTherapistUpdateEvent(event));
   if (!updatedTherapist) {
     return;
   }
@@ -1120,10 +1601,9 @@ function renderActiveFilters() {
   entries.forEach((entry) => {
     const pill = document.createElement("div");
     pill.className = "filter-pill";
-    pill.innerHTML = `
-      <span>${entry.label}</span>
-      <button type="button" aria-label="Remove ${entry.label}" data-remove-filter data-key="${entry.key}" data-value="${entry.value}">X</button>
-    `;
+    const text = document.createElement("span"); text.textContent = entry.key === "languages" ? languageDisplayLabel(entry.value) : entry.key === "pronouns" ? pronounDisplayLabel(entry.value) : entry.label;
+    const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "X"; remove.setAttribute("aria-label", "Remove " + text.textContent); remove.dataset.removeFilter = ""; remove.dataset.key = entry.key; remove.dataset.value = entry.value;
+    pill.append(text, remove);
     fragment.appendChild(pill);
   });
 
@@ -1143,9 +1623,13 @@ function clearAllFilters() {
   state.filters = {
     search: "",
     state: [],
+    sessionFormat: [],
+    population: [],
+    modalities: [],
     specialties: [],
     languages: [],
     therapyTypes: [],
+    pronouns: [], gender: [], culturalBackground: [], religiousBackground: [], faithIntegrated: [],
     availability: [],
     priceMin: 0,
     priceMax: 300
@@ -1156,14 +1640,41 @@ function clearAllFilters() {
   render(true);
 }
 
+
+let mobileFilterReturnFocus = null;
+function setFilterBackgroundInert(value) {
+  [...document.body.children].forEach(element => {
+    if (element === elements.mobileFilters || element === elements.mobileBackdrop || element.tagName === "SCRIPT") return;
+    if (value && !element.inert) { element.inert = true; element.dataset.filterInert = "true"; }
+    else if (!value && element.dataset.filterInert) { element.inert = false; delete element.dataset.filterInert; }
+  });
+}
+function initMobileFilterAccessibility() {
+  elements.mobileFilters.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); closeMobileFilters(); return; }
+    if (event.key !== "Tab") return;
+    const targets = [...elements.mobileFilters.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href]')].filter(element => element.getClientRects().length);
+    const first = targets[0], last = targets[targets.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+  });
+}
+
 function openMobileFilters() {
+  mobileFilterReturnFocus = document.activeElement;
   elements.mobileFilters.classList.remove("hidden");
+  elements.openFiltersButton.setAttribute("aria-expanded", "true");
+  setFilterBackgroundInert(true);
+  elements.closeFiltersButton.focus();
   elements.mobileBackdrop.classList.remove("hidden");
   document.body.classList.add("modal-open");
 }
 
 function closeMobileFilters() {
   elements.mobileFilters.classList.add("hidden");
+  elements.openFiltersButton.setAttribute("aria-expanded", "false");
+  setFilterBackgroundInert(false);
+  if (mobileFilterReturnFocus && mobileFilterReturnFocus.isConnected) mobileFilterReturnFocus.focus();
   elements.mobileBackdrop.classList.add("hidden");
   document.body.classList.remove("modal-open");
 }
