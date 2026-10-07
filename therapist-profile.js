@@ -14,6 +14,284 @@ const profileFallbackTherapists = [
   }
 ];
 
+const SPECIALTY_GROUPS = { "Mood, anxiety & mental health": ["Anxiety", "Bipolar / Manic", "Depression", "OCD", "Personality Disorders", "Schizophrenia", "Self-Doubt"], "Neurodevelopment & disability": ["ADHD", "Autism Spectrum", "Disabilities", "Neurodivergence"], "Addictions & substance use": ["Chemical Dependency", "Drug Addiction / Alcoholism", "Gambling"], "Body image, eating & health": ["Bariatric", "Body Dysmorphia", "Eating Disorders", "HIV/AIDS", "Traumatic Injury"], "Trauma & safety": ["Domestic Violence", "High Risk", "PTSD", "Self Harm"], "Sexual concerns": ["Sex Addiction", "Sexual Disorder", "Sexual Trauma"], "Identity & cultural concerns": ["Cultural / Ethnic Concerns", "LGBTQ", "Men's Issues", "Trans Issues", "Women's Issues"], "Relationships & life stages": ["Divorce", "End of Life", "Geriatrics", "Grief", "Infertility", "Parenting", "Postpartum"], "Other concerns": ["Hoarding"] };
+const SPECIALTY_CATEGORY_ALIASES = { "Schizo": "Schizophrenia", "Bariatric Ass.": "Bariatric", "Body Dysmporphia": "Body Dysmorphia", "Chemical Dep.": "Chemical Dependency", "Cultural Ethnic": "Cultural / Ethnic Concerns", "Drug Addiction/Alcoholism": "Drug Addiction / Alcoholism", "Eating Disorder": "Eating Disorders", "Mens Issues": "Men's Issues", "Tramatic Injury": "Traumatic Injury", "Autism Spectrum Disorder": "Autism Spectrum", "Bariatric Support": "Bariatric", "Bipolar Disorder": "Bipolar / Manic", "Body Dysmorphic Disorder": "Body Dysmorphia", "Disability-related Concerns": "Disabilities", "End-of-Life Support": "End of Life", "Gambling Addiction": "Gambling", "Older Adults": "Geriatrics", "Grief / Loss": "Grief", "High-Risk Behaviors": "High Risk", "Hoarding Disorder": "Hoarding", "LGBTQ+ Support": "LGBTQ", "Post-Traumatic Stress Disorder": "PTSD", "Substance Use": "Drug Addiction / Alcoholism", "Women’s Issues": "Women's Issues" };
+const MODALITY_CHOICES = ["Art Therapy", "Brain Spotting", "CBT", "Christian Counseling", "DBT", "EMDR", "Exposure Therapy", "Exposure Therapy (Narrative)", "Dance/ Movement Therapy", "Internal Family Systems (IFS)", "Music Therapy", "Person- Centered", "Play Therapy", "Somatic"];
+function normalizeSpecialties(values) {
+  const allowed = Object.values(SPECIALTY_GROUPS).flat();
+  return [...new Set((values || []).flatMap(raw => {
+    const trimmed = String(raw).trim();
+    const direct = SPECIALTY_CATEGORY_ALIASES[trimmed] || trimmed;
+    if (allowed.includes(direct)) return [direct];
+    return legacyNormalizeSpecialties([trimmed]).map(value => SPECIALTY_CATEGORY_ALIASES[value] || value).filter(value => allowed.includes(value));
+  }))];
+}
+function normalizeModalities(values) {
+  const aliases = { "Brainspotting": "Brain Spotting", "Narrative Exposure Therapy": "Exposure Therapy (Narrative)", "Dance/Movement Therapy": "Dance/ Movement Therapy", "Person-Centered": "Person- Centered" };
+  return [...new Set((values || []).map(value => aliases[value] || value).filter(value => MODALITY_CHOICES.includes(value)))];
+}
+const SPECIALTY_ALIASES = {
+  "depression": [
+    "Depression"
+  ],
+  "dep": [
+    "Depression"
+  ],
+  "anxiety": [
+    "Anxiety"
+  ],
+  "anx": [
+    "Anxiety"
+  ],
+  "autism spectrum disorder": [
+    "Autism Spectrum Disorder"
+  ],
+  "asd": [
+    "Autism Spectrum Disorder"
+  ],
+  "autism": [
+    "Autism Spectrum Disorder"
+  ],
+  "bariatric support": [
+    "Bariatric Support"
+  ],
+  "bariatric concerns": [
+    "Bariatric Support"
+  ],
+  "bipolar disorder": [
+    "Bipolar Disorder"
+  ],
+  "bipolar": [
+    "Bipolar Disorder"
+  ],
+  "bd/man": [
+    "Bipolar Disorder"
+  ],
+  "bd/manic": [
+    "Bipolar Disorder"
+  ],
+  "body dysmorphic disorder": [
+    "Body Dysmorphic Disorder"
+  ],
+  "bdd": [
+    "Body Dysmorphic Disorder"
+  ],
+  "body dysmporphia": [
+    "Body Dysmorphic Disorder"
+  ],
+  "substance use": [
+    "Substance Use"
+  ],
+  "chemical d": [
+    "Substance Use"
+  ],
+  "chemical dep": [
+    "Substance Use"
+  ],
+  "chemical dependency": [
+    "Substance Use"
+  ],
+  "substance use disorder": [
+    "Substance Use"
+  ],
+  "sud": [
+    "Substance Use"
+  ],
+  "cultural / ethnic concerns": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cul.e": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cul.ethn": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cul.ethnic": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cultural / ethnic issues": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "cultural/ethnic concerns": [
+    "Cultural / Ethnic Concerns"
+  ],
+  "disability-related concerns": [
+    "Disability-related Concerns"
+  ],
+  "disab": [
+    "Disability-related Concerns"
+  ],
+  "disab.": [
+    "Disability-related Concerns"
+  ],
+  "disability": [
+    "Disability-related Concerns"
+  ],
+  "divorce": [
+    "Divorce"
+  ],
+  "div": [
+    "Divorce"
+  ],
+  "divorce-related issues": [
+    "Divorce"
+  ],
+  "domestic violence": [
+    "Domestic Violence"
+  ],
+  "dv": [
+    "Domestic Violence"
+  ],
+  "eating disorders": [
+    "Eating Disorders"
+  ],
+  "ed": [
+    "Eating Disorders"
+  ],
+  "end-of-life support": [
+    "End-of-Life Support"
+  ],
+  "end-of-life care": [
+    "End-of-Life Support"
+  ],
+  "eol": [
+    "End-of-Life Support"
+  ],
+  "grief / loss": [
+    "Grief / Loss"
+  ],
+  "grief": [
+    "Grief / Loss"
+  ],
+  "grief & loss": [
+    "Grief / Loss"
+  ],
+  "hoarding disorder": [
+    "Hoarding Disorder"
+  ],
+  "hoarding": [
+    "Hoarding Disorder"
+  ],
+  "lgbtq+ support": [
+    "LGBTQ+ Support"
+  ],
+  "lgbtq": [
+    "LGBTQ+ Support"
+  ],
+  "life transitions": [
+    "Life Transitions"
+  ],
+  "life transition": [
+    "Life Transitions"
+  ],
+  "self-esteem": [
+    "Self-Esteem"
+  ],
+  "low self-esteem": [
+    "Self-Esteem"
+  ],
+  "self-doubt": [
+    "Self-Doubt"
+  ],
+  "self doubt": [
+    "Self-Doubt"
+  ],
+  "self-d": [
+    "Self-Doubt"
+  ],
+  "parenting": [
+    "Parenting"
+  ],
+  "parentin": [
+    "Parenting"
+  ],
+  "personality disorders": [
+    "Personality Disorders"
+  ],
+  "pd": [
+    "Personality Disorders"
+  ],
+  "post-traumatic stress disorder": [
+    "Post-Traumatic Stress Disorder"
+  ],
+  "ptsd": [
+    "Post-Traumatic Stress Disorder"
+  ],
+  "person-centered therapy": [
+    "Person-Centered Therapy"
+  ],
+  "pc": [
+    "Person-Centered Therapy"
+  ],
+  "stress management": [
+    "Stress Management"
+  ],
+  "stress": [
+    "Stress Management"
+  ],
+  "breathwork": [
+    "Breathwork"
+  ],
+  "breath work": [
+    "Breathwork"
+  ],
+  "older adults": [
+    "Older Adults"
+  ],
+  "geriatr": [
+    "Older Adults"
+  ],
+  "anxiety depression": [
+    "Anxiety",
+    "Depression"
+  ],
+  "stress greif-loss": [
+    "Stress Management",
+    "Grief / Loss"
+  ],
+  "somatic anx": [
+    "Somatic",
+    "Anxiety"
+  ],
+  "somatic/anx": [
+    "Somatic",
+    "Anxiety"
+  ],
+  "somatic|anx": [
+    "Somatic",
+    "Anxiety"
+  ]
+};
+function legacyNormalizeSpecialties(values) {
+  const result = [];
+  for (const raw of values || []) {
+    const value = String(raw).trim().replace(/\s+/g, " "), key = value.toLowerCase();
+    if (SPECIALTY_ALIASES[key]) { result.push(...SPECIALTY_ALIASES[key]); continue; }
+    if (value.includes("|")) { result.push(...legacyNormalizeSpecialties(value.split("|"))); continue; }
+    if (/^[a-z]$/i.test(value) || /^(IF|ND|PP|RPT|RT|AT|MT|F\/B|F\/B\/LGBTQ\+|WI.*)$/i.test(value)) continue;
+    if (value) result.push(value);
+  }
+  return [...new Map(result.map(value => [value.toLowerCase(), value])).values()];
+}
+
+
+// Expand patient-facing labels without changing stored directory values.
+const PROFILE_CARE_LABELS = {
+  'ADHD': 'Attention-Deficit/Hyperactivity Disorder (ADHD)',
+  'OCD': 'Obsessive-Compulsive Disorder (OCD)',
+  'PTSD': 'Post-Traumatic Stress Disorder (PTSD)',
+  'CBT': 'Cognitive Behavioral Therapy (CBT)',
+  'DBT': 'Dialectical Behavior Therapy (DBT)',
+  'EMDR': 'Eye Movement Desensitization and Reprocessing (EMDR)',
+  'LGBTQ': 'Lesbian, Gay, Bisexual, Transgender, and Queer (LGBTQ) Support',
+  'HIV/AIDS': 'Human Immunodeficiency Virus (HIV) / Acquired Immunodeficiency Syndrome (AIDS)',
+  'Bipolar / Manic': 'Bipolar Disorder / Mania'
+};
+function profileCareLabel(value) { return PROFILE_CARE_LABELS[value] || value; }
+function profileCareSentence(value) {
+  return value.replace(/[^()]+(?=\(|$)/g, text => text.toLowerCase());
+}
+
 const STANDARD_SESSION_RATE = 150;
 
 const profileElements = {
@@ -28,7 +306,9 @@ const profileElements = {
   sidebarName: document.querySelector("#sidebar-name"),
   sidebarRole: document.querySelector("#sidebar-role"),
   languagesList: document.querySelector("#languages-list"),
-  therapyTypesList: document.querySelector("#therapy-types-list"),
+  sessionFormatList: document.querySelector("#session-format-list"),
+  populationList: document.querySelector("#population-list"),
+  modalitiesList: document.querySelector("#modalities-list"),
   aboutCopy: document.querySelector("#about-copy"),
   specialtiesGrid: document.querySelector("#specialties-grid"),
   expectationOne: document.querySelector("#expectation-one"),
@@ -82,6 +362,16 @@ async function renderEditAccess(therapist) {
 }
 
 function renderTherapistProfile(therapist) {
+  const filterInfo = typeof window.findTherapistFilterInfo === "function" ? window.findTherapistFilterInfo(therapist.name) : null;
+  therapist = {
+    ...therapist,
+    // Use the same current specialty selections as the public directory.
+    specialties: normalizeSpecialties(filterInfo && Array.isArray(filterInfo.specialties) ? filterInfo.specialties : therapist.specialties).map(profileCareLabel),
+    sessionFormat: filterInfo && Array.isArray(filterInfo.sessionFormat) && filterInfo.sessionFormat.length ? filterInfo.sessionFormat : ["Virtual"],
+    population: filterInfo && Array.isArray(filterInfo.population) ? filterInfo.population : [],
+    modalities: filterInfo && Array.isArray(filterInfo.modalities) ? filterInfo.modalities.map(profileCareLabel) : []
+  };
+
   document.title = `${therapist.name} | Footprints to Feel Better`;
 
   profileElements.profileName.textContent = therapist.name;
@@ -98,11 +388,56 @@ function renderTherapistProfile(therapist) {
 
   renderChipGroup(profileElements.heroChips, therapist.specialties.slice(0, 4));
   renderChipGroup(profileElements.languagesList, therapist.languages, "Languages coming soon");
-  renderChipGroup(profileElements.therapyTypesList, therapist.therapyTypes, "Formats coming soon");
+  renderChipGroup(profileElements.sessionFormatList, therapist.sessionFormat, "Virtual");
+  renderChipGroup(profileElements.populationList, therapist.population, "Details coming soon");
+  renderChipGroup(profileElements.modalitiesList, therapist.modalities, "Details coming soon");
   renderAboutCopy(therapist);
   renderSpecialties(therapist.specialties);
   renderExpectations(therapist);
   renderHighlights(therapist);
+  renderIdentity(therapist.name);
+}
+
+
+function findTherapistIdentityInfo(name) {
+  const normalize = (value) => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]+/g, " ").trim();
+  const target = normalize(name);
+  if (!target) return null;
+  const records = Array.isArray(window.THERAPIST_FILTER_DATA) ? window.THERAPIST_FILTER_DATA : [];
+  const matches = records.filter((record) => Array.isArray(record.identityProfileNames)
+    && record.identityProfileNames.some((profileName) => normalize(profileName) === target));
+  return matches.length === 1 ? matches[0].identifiesAs : null;
+}
+
+function renderIdentity(therapistName) {
+  const container = document.querySelector("#identifies-as-content");
+  if (!container) return;
+  const identity = findTherapistIdentityInfo(therapistName);
+  const groups = identity ? [
+    ["Pronouns", identity.pronouns ? [identity.pronouns] : []],
+    ["Race / ethnicity", Array.isArray(identity.ethnicity) ? identity.ethnicity : []],
+    ["Faith / spirituality", Array.isArray(identity.faith) ? identity.faith : []],
+    ["LGBTQ+", identity.lgbtq === true ? ["LGBTQ+"] : []]
+  ].filter((group) => group[1].length) : [];
+  const fragment = document.createDocumentFragment();
+  if (!groups.length) {
+    const empty = document.createElement("p");
+    empty.className = "text-sm text-[#7b6169]";
+    empty.textContent = "Not provided";
+    fragment.appendChild(empty);
+  }
+  groups.forEach(([label, values]) => {
+    const group = document.createElement("div");
+    const heading = document.createElement("p");
+    heading.className = "text-xs font-bold uppercase tracking-[0.15em] text-clay";
+    heading.textContent = label;
+    const chips = document.createElement("div");
+    chips.className = "mt-3 flex flex-wrap gap-2";
+    renderChipGroup(chips, values);
+    group.append(heading, chips);
+    fragment.appendChild(group);
+  });
+  container.replaceChildren(fragment);
 }
 
 function buildRoleLine(therapist) {
@@ -194,11 +529,16 @@ function renderSpecialties(specialties) {
   items.forEach((specialty, index) => {
     const card = document.createElement("article");
     card.className = "rounded-[1.5rem] border border-[#f0d8dd] bg-sand p-5";
-    card.innerHTML = `
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-clay">Specialty ${String(index + 1).padStart(2, "0")}</p>
-      <h3 class="mt-3 font-heading text-2xl font-bold text-ink">${specialty}</h3>
-      <p class="mt-3 text-sm leading-7 text-[#5b4850]">${buildSpecialtyDescription(specialty)}</p>
-    `;
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "text-xs font-bold uppercase tracking-[0.2em] text-clay";
+    eyebrow.textContent = `Specialty ${String(index + 1).padStart(2, "0")}`;
+    const heading = document.createElement("h3");
+    heading.className = "mt-3 font-heading text-2xl font-bold text-ink break-words";
+    heading.textContent = specialty;
+    const description = document.createElement("p");
+    description.className = "mt-3 text-sm leading-7 text-[#5b4850]";
+    description.textContent = buildSpecialtyDescription(specialty);
+    card.append(eyebrow, heading, description);
     fragment.appendChild(card);
   });
 
@@ -207,8 +547,10 @@ function renderSpecialties(specialties) {
 
 function renderExpectations(therapist) {
   const firstName = therapist.name.split(" ")[0] || "This therapist";
-  const therapyTypes = therapist.therapyTypes.slice(0, 2).join(" and ").toLowerCase() || "supportive";
-  const specialties = therapist.specialties.slice(0, 3).join(", ").toLowerCase() || "each client's goals";
+  const therapyTypes = (therapist.modalities && therapist.modalities.length
+    ? therapist.modalities.slice(0, 2).join(" and ")
+    : therapist.therapyTypes.slice(0, 2).join(" and ").toLowerCase()) || "supportive";
+  const specialties = therapist.specialties.slice(0, 3).map(profileCareSentence).join(", ") || "each client's goals";
 
   profileElements.expectationOne.textContent = `${firstName} begins with a calm, supportive conversation so the client feels heard.`;
   profileElements.expectationTwo.textContent = `Support may draw from ${therapyTypes} approaches based on what feels most helpful.`;
@@ -216,7 +558,7 @@ function renderExpectations(therapist) {
 }
 
 function renderHighlights(therapist) {
-  const specialtySummary = therapist.specialties.slice(0, 2).join(" and ").toLowerCase() || "a range of emotional needs";
+  const specialtySummary = therapist.specialties.slice(0, 2).map(profileCareSentence).join(" and ") || "a range of emotional needs";
   const firstName = therapist.name.split(" ")[0] || "This therapist";
   profileElements.highlightApproach.textContent = `${firstName} brings a supportive style centered on empathy, trust, and practical care.`;
   profileElements.highlightFit.textContent = `This therapist may be a good fit for clients looking for support with ${specialtySummary}.`;
@@ -244,8 +586,13 @@ function buildProfileParagraphs(therapist) {
     paragraphs.push(`${firstName} ${locationText}${languageText}.`);
   }
 
+  if (therapist.population && therapist.population.length) {
+    const formatText = (therapist.sessionFormat || ["Virtual"]).join(" and ").toLowerCase();
+    paragraphs.push(`${firstName} works with ${therapist.population.join(", ").toLowerCase()} and offers ${formatText} sessions.`);
+  }
+
   if (therapist.specialties.length || therapist.therapyTypes.length) {
-    const specialtiesText = therapist.specialties.length ? therapist.specialties.slice(0, 3).join(", ").toLowerCase() : "client-specific concerns";
+    const specialtiesText = therapist.specialties.length ? therapist.specialties.slice(0, 3).map(profileCareSentence).join(", ") : "client-specific concerns";
     const typesText = therapist.therapyTypes.length ? therapist.therapyTypes.join(" and ").toLowerCase() : "supportive care";
     paragraphs.push(`Sessions may include support around ${specialtiesText} using ${typesText} care options.`);
   }
@@ -254,7 +601,7 @@ function buildProfileParagraphs(therapist) {
 }
 
 function buildSpecialtyDescription(specialty) {
-  return `Support may focus on ${specialty.toLowerCase()} with a calm, practical approach tailored to the client's needs.`;
+  return `Support may focus on ${profileCareSentence(specialty)} with a calm, practical approach tailored to the client's needs.`;
 }
 
 function formatPrice(value) {
@@ -270,8 +617,3 @@ function formatPrice(value) {
 }
 
 initTherapistProfile();
-
-
-
-
-
