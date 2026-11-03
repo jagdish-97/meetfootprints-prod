@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "kevin-adams",
     "name": "Kevin Adams",
@@ -361,7 +361,8 @@
       "ADHD"
     ],
     "languages": [
-      "English"
+      "English",
+      "Haitian Creole"
     ],
     "therapyTypes": [],
     "availability": "Available",
@@ -1343,7 +1344,8 @@
       "Disability"
     ],
     "languages": [
-      "English"
+      "English",
+      "Spanish"
     ],
     "therapyTypes": [],
     "availability": "Available",

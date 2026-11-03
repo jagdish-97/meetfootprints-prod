@@ -55,6 +55,10 @@
   function normalizeTherapist(record) {
     const base = { ...EMPTY_THERAPIST };
     const next = { ...base, ...(record || {}) };
+    const languages = toArray(next.languages);
+    if (!languages.some((language) => /\benglish\b/i.test(language))) {
+      languages.push("English");
+    }
     return {
       id: String(next.id || slugify(next.name) || ""),
       email: String(next.email || "").trim().toLowerCase(),
@@ -63,7 +67,7 @@
       title: String(next.title || "").trim(),
       location: String(next.location || "").trim(),
       specialties: toArray(next.specialties),
-      languages: toArray(next.languages),
+      languages: [...new Set(languages)],
       therapyTypes: toArray(next.therapyTypes || next.therapy_types),
       price: next.price === "" || next.price == null || Number.isNaN(Number(next.price)) ? null : Number(next.price),
       availability: String(next.availability || base.availability).trim() || base.availability,
@@ -74,10 +78,16 @@
   }
 
   function mapDbTherapist(record) {
-    return normalizeTherapist({
+    const therapist = normalizeTherapist({
       ...record,
       therapyTypes: record.therapy_types
     });
+    if (therapist.id === "lynda-correa" || therapist.name.toLowerCase() === "lynda correa") {
+      therapist.languages = [...new Set([...therapist.languages, "English", "Haitian Creole"])];
+    }    if (therapist.id === "stephanie-ramirez" || therapist.name.toLowerCase() === "stephanie ramirez") {
+      therapist.languages = [...new Set([...therapist.languages, "English", "Spanish"])];
+    }
+    return therapist;
   }
 
   function getTherapistUpdateKey(therapistId) {

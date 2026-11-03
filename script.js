@@ -285,7 +285,7 @@ const FILTER_KEYS = ["pronouns", "gender", "culturalBackground", "religiousBackg
 const SESSION_FORMAT_ORDER = ["In-Person", "Virtual"];
 const LOCATION_OPTIONS = ["NY", "NJ", "CT", "FL", "NV"];
 const POPULATION_ORDER = ["Individuals", "Couples", "Families", "Adults", "Teens (13-17)", "Children (5-12)", "Groups"];
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 9;
 const DEFAULT_THERAPIST_IMAGE = "data/portraits/portrait.svg";
 let imageHydrationRunId = 0;
 const menuToggle = document.querySelector("#menu-toggle");
@@ -307,6 +307,7 @@ const LANGUAGE_FILTERS = [
   { label: "اردو", aliases: ["Urdu", "اردو"] },
   { label: "हिंदी", aliases: ["Hindi", "हिंदी"] },
   { label: "ਪੰਜਾਬੀ", aliases: ["Punjabi", "ਪੰਜਾਬੀ"] },
+  { label: "Haitian Creole", aliases: ["Haitian Creole", "Kreyòl Ayisyen", "Kreyol Ayisyen"] },
   { label: "Bilingual", aliases: ["Bilingual"] }
 ];
 const state = {

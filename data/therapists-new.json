@@ -419,8 +419,9 @@
             "ADHD"
         ],
         "languages": [
-            "English"
-        ],
+      "English",
+      "Haitian Creole"
+    ],
         "therapyTypes": [],
         "price": null,
         "availability": "Available",
@@ -1468,7 +1469,8 @@
             "Disability"
         ],
         "languages": [
-            "English"
+          "English",
+          "Spanish"
         ],
         "therapyTypes": [],
         "price": null,
