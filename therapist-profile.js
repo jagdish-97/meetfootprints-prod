@@ -365,6 +365,7 @@ function renderTherapistProfile(therapist) {
   const filterInfo = typeof window.findTherapistFilterInfo === "function" ? window.findTherapistFilterInfo(therapist.name) : null;
   therapist = {
     ...therapist,
+    summary: [therapist.summary, filterInfo && filterInfo.populationNote].filter(Boolean).join(" "),
     // Use the same current specialty selections as the public directory.
     specialties: normalizeSpecialties(filterInfo && Array.isArray(filterInfo.specialties) ? filterInfo.specialties : therapist.specialties).map(profileCareLabel),
     sessionFormat: filterInfo && Array.isArray(filterInfo.sessionFormat) && filterInfo.sessionFormat.length ? filterInfo.sessionFormat : ["Virtual"],

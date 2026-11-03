@@ -654,6 +654,7 @@ function applyFilterOverlay(therapist) {
   return {
     ...therapist,
     ...identityFilterFields(therapist.name),
+    summary: [therapist.summary, overlay && overlay.populationNote].filter(Boolean).join(" "),
     specialties: normalizeSpecialties(Array.isArray(overlay?.specialties) ? overlay.specialties : therapist.specialties),
     faithIntegrated: (findPublicIdentityRecord(therapist.name)?.modalities || []).includes("Christian Counseling") ? ["Offers faith-integrated therapy"] : [],
     location: therapist.location || (overlay && overlay.state) || "",

@@ -257,6 +257,7 @@ window.THERAPIST_FILTER_DATA = [
     },
     {
         "name": "Julia G. Tumasian",
+        "populationNote": "Julia accepts clients ages 12 and older. She cannot accept children under 12 until she has LP status and Play Therapy certification.",
         "state": "NY",
         "sessionFormat": [
             "In-Person",
@@ -268,7 +269,7 @@ window.THERAPIST_FILTER_DATA = [
             "Families",
             "Adults",
             "Teens (13-17)",
-            "Children (5-12)"
+            "Children (12 only)"
         ],
         "modalities": [
             "CBT",
@@ -2647,6 +2648,7 @@ window.THERAPIST_FILTER_DATA = [
     },
     {
         "name": "Johanna Mathis",
+        "populationNote": "Johanna accepts adults and couples only. She does not accept teens or children.",
         "state": "NY",
         "sessionFormat": [
             "Virtual"
@@ -2654,8 +2656,7 @@ window.THERAPIST_FILTER_DATA = [
         "population": [
             "Individuals",
             "Couples",
-            "Adults",
-            "Teens (13-17)"
+            "Adults"
         ],
         "modalities": [
             "CBT",
