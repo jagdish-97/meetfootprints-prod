@@ -3707,7 +3707,6 @@ window.THERAPIST_FILTER_DATA = [
             "Children (5-12)"
         ],
         "modalities": [
-            "Art Therapy",
             "CBT",
             "DBT",
             "Play Therapy"
