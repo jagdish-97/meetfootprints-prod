@@ -3987,7 +3987,6 @@ window.THERAPIST_FILTER_DATA = [
             "Adults"
         ],
         "modalities": [
-            "Art Therapy",
             "CBT",
             "DBT",
             "Person- Centered",
