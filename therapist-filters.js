@@ -6567,8 +6567,7 @@ window.THERAPIST_FILTER_DATA = [
             "Couples",
             "Families",
             "Adults",
-            "Teens (13-17)",
-            "Children (5-12)"
+            "Teens (13-17)"
         ],
         "modalities": [
             "CBT",
