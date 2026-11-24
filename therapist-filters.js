@@ -206,56 +206,6 @@ window.THERAPIST_FILTER_DATA = [
         ]
     },
     {
-        "name": "Joaraliz T Jimenez",
-        "state": "NY",
-        "sessionFormat": [
-            "In-Person",
-            "Virtual"
-        ],
-        "population": [
-            "Individuals",
-            "Families",
-            "Adults",
-            "Children (5-12)"
-        ],
-        "modalities": [
-            "CBT",
-            "Exposure Therapy (Narrative)",
-            "Internal Family Systems (IFS)",
-            "Music Therapy",
-            "Person- Centered",
-            "Somatic"
-        ],
-        "identityProfileNames": [
-            "Joaraliz Jimenez"
-        ],
-        "identifiesAs": {
-            "pronouns": "She/Her",
-            "ethnicity": [
-                "Latino/Latina"
-            ],
-            "faith": [],
-            "lgbtq": false,
-            "publicDisplay": {
-                "ethnicity": true,
-                "faith": true,
-                "pronouns": true
-            }
-        },
-        "specialties": [
-            "Anxiety",
-            "Depression",
-            "Divorce",
-            "End of Life",
-            "Grief",
-            "PTSD",
-            "Postpartum",
-            "Self-Doubt",
-            "Sexual Trauma",
-            "Women's Issues"
-        ]
-    },
-    {
         "name": "Julia G. Tumasian",
         "populationNote": "Julia accepts clients ages 12 and older. She cannot accept children under 12 until she has LP status and Play Therapy certification.",
         "state": "NY",
